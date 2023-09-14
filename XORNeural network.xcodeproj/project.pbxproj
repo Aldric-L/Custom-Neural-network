@@ -31,6 +31,7 @@
 		FE2F08D72AB1A1100029A57D /* GeneticAlgorithm.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GeneticAlgorithm.hpp; sourceTree = "<group>"; };
 		FE7CACB72AA9FB68002EEBD1 /* XORNeural network */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "XORNeural network"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE7CACBA2AA9FB68002EEBD1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		FE98292D2AB334C900E5B7ED /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FEF3842E2AAA37C80094AA50 /* NeuralNetwork.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NeuralNetwork.cpp; sourceTree = "<group>"; };
 		FEF3842F2AAA37C80094AA50 /* NeuralNetwork.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NeuralNetwork.hpp; sourceTree = "<group>"; };
 		FEF384312AAB7C5E0094AA50 /* Matrix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix.cpp; sourceTree = "<group>"; };
@@ -53,6 +54,7 @@
 		FE7CACAE2AA9FB67002EEBD1 = {
 			isa = PBXGroup;
 			children = (
+				FE98292D2AB334C900E5B7ED /* README.md */,
 				FE7CACB92AA9FB68002EEBD1 /* XORNeural network */,
 				FE7CACB82AA9FB68002EEBD1 /* Products */,
 			);
