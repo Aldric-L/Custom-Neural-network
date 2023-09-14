@@ -122,13 +122,16 @@ int main(int argc, const char * argv[]) {
     std::function<void(NeuralNetwork<4>&, NeuralNetwork<4>*, NeuralNetwork<4>*)> merging_instructions =
     [](NeuralNetwork<4>& child, NeuralNetwork<4>* parent1, NeuralNetwork<4>* parent2) {
         BaseGeneticAlgorithm::mergeLayers<NeuralNetwork<4>, NeuralLayer<6, 3>>(2, parent1, parent2, child);
+        BaseGeneticAlgorithm::mergeLayers<NeuralNetwork<4>, NeuralLayer<3, 6>>(3, parent1, parent2, child);
+        BaseGeneticAlgorithm::mergeLayers<NeuralNetwork<4>, NeuralLayer<1, 3>>(4, parent1, parent2, child);
     };
     
-    GeneticAlgorithm<4, 3, 1, 8> ga (inputs, outputs, init_instructions);
-    ga.trainNetworks(2, merging_instructions);
+    GeneticAlgorithm<4, 3, 1, 8, 100> ga (inputs, outputs, init_instructions);
+    NeuralNetwork<4>* bestnet = ga.trainNetworks(50, merging_instructions);
+    std::cout << *bestnet->process<3, 1>(Input);
     
     
-    char hello;
-    std::cin >> hello;
+    //char hello;
+    //std::cin >> hello;
     return 0;
 }

@@ -23,6 +23,9 @@ public:
     
     AbstractNeuralLayer(const std::size_t neuronNumber, const std::size_t previousNeuronNumber, const std::size_t layerId) : neuronNumber(neuronNumber), previousNeuronNumber(previousNeuronNumber), layerId(layerId) {}
     
+    inline std::size_t getNeuronNumber(){ return neuronNumber; }
+    inline std::size_t getPreviousNeuronNumber(){ return previousNeuronNumber; }
+    
     inline void setActivationFunction(std::function<float(float)> actfunc){ activationFunction = actfunc; }
     
     inline void setFirstRow(const bool first_row){ isFirstRow = first_row; }
@@ -39,11 +42,11 @@ template <std::size_t NEURON_NUMBER, std::size_t PREVIOUS_NEURON_NUMBER>
 class NeuralLayer : public AbstractNeuralLayer {
 private:
     Matrix<float, NEURON_NUMBER, 1> ownActivationLayer;
-    
-public:
     Matrix<float, PREVIOUS_NEURON_NUMBER, 1>* previousActivationLayer;
     Matrix<float, NEURON_NUMBER, PREVIOUS_NEURON_NUMBER> weights;
     Matrix<float, NEURON_NUMBER, 1> biases;
+    
+public:
     
     NeuralLayer(const std::size_t layerId) : AbstractNeuralLayer(NEURON_NUMBER, PREVIOUS_NEURON_NUMBER, layerId) {
         weights.transform([](float x, std::size_t row, std::size_t column) {return 1;});
@@ -73,10 +76,19 @@ public:
         biases = *new_biases;
     }
     
+    inline Matrix<float, NEURON_NUMBER, 1>* getBiasesAccess(){
+        Matrix<float, NEURON_NUMBER, 1>* b_point (&biases);
+        return b_point;    }
+    
     inline void setWeights(MatrixPrototype<float>* arg) {
         Matrix<float, NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>* new_weights(0);
         new_weights = (Matrix<float, NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>*)arg;
         weights = *new_weights;
+    }
+    
+    inline Matrix<float, NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>* getWeightsAccess (){
+        Matrix<float, NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>* w_point (&weights);
+        return w_point;
     }
     
     inline void setPreviousActivationLayer(MatrixPrototype<float>* arg) {

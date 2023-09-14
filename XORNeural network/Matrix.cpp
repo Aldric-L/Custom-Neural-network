@@ -15,7 +15,7 @@ template <typename element_type, std::size_t ROWS, std::size_t COLUMNS>
 std::function<element_type(element_type, std::size_t, std::size_t)> Matrix<element_type, ROWS, COLUMNS>::IDENTITY_TRANSFORM = [](element_type x, std::size_t row, std::size_t column) { return ((column%2 != 0 && row%2 != 0) || (column%2 == 0 && row%2 == 0)) ? 1 : 0;};
 
 template <typename element_type, std::size_t ROWS, std::size_t COLUMNS>
-std::function<element_type(element_type, std::size_t, std::size_t)> Matrix<element_type, ROWS, COLUMNS>::RANDOM_TRANSFORM = [](element_type x, std::size_t row, std::size_t column) { std::random_device rd;  std::mt19937 gen(rd()); std::normal_distribution<double> distribution(0.0,1.5); return distribution(gen); };
+std::function<element_type(element_type, std::size_t, std::size_t)> Matrix<element_type, ROWS, COLUMNS>::RANDOM_TRANSFORM = [](element_type x, std::size_t row, std::size_t column) { std::random_device rd;  std::mt19937 gen(rd()); std::normal_distribution<double> distribution(0.0,3); return distribution(gen); };
 
 
 
