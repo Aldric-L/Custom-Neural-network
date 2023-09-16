@@ -30,7 +30,7 @@ public:
     
     inline void setFirstRow(const bool first_row){ isFirstRow = first_row; }
     
-    inline virtual void setInput(MatrixPrototype<float>* arg) { std::cout << "Hello2"; return; };
+    inline virtual void setInput(MatrixPrototype<float>* arg) { return; };
     inline virtual void setBiases(MatrixPrototype<float>* new_biases) { return; };
     inline virtual void setWeights(MatrixPrototype<float>* new_weights) { return; };
     inline virtual void setPreviousActivationLayer(MatrixPrototype<float>* argument) { return; };

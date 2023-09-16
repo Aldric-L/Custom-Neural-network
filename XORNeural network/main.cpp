@@ -28,7 +28,7 @@
 
 #include "Matrix.cpp"
 #include "NeuralNetwork.cpp"
-#include "GeneticAlgorithm.hpp"
+#include "GeneticAlgorithm.cpp"
 
  
 int main(int argc, const char * argv[]) {
@@ -87,7 +87,9 @@ int main(int argc, const char * argv[]) {
     Matrix<float, 3, 1> Input2 = {{12, 13, 1}};
     std::cout << *neuralnet.process<3, 1>(Input2);*/
     
-    std::array<Matrix <float, 3, 1>, 8> inputs =
+    
+    //XOR with dim3
+    /*std::array<Matrix <float, 3, 1>, 8> inputs =
     {{ {{ {1,0,0} }}, {{ {0,0,1} }}, {{ {0,1,0} }},
        {{ {1,1,0} }}, {{ {1,0,1} }}, {{ {1,1,0} }},
        {{ {0,0,0} }}, {{ {1,1,1} }} }};
@@ -106,19 +108,6 @@ int main(int argc, const char * argv[]) {
     Matrix<float, 3, 1> Input = {{1, 0, 1}};
     std::cout << *neuralnet.process<3, 1>(Input);
     
-    // Prototype 1
-    // We create a new network from instructions and we change layers manually
-    // Then we return the network so that GeneticAlgorithm can update its pointers
-    /*std::function<NeuralNetwork<4>(const std::function<void(NeuralNetwork<4>&)>, NeuralNetwork<4>*, NeuralNetwork<4>*)> merging_instructions =
-    [](const std::function<void(NeuralNetwork<4>&)> init_instructions, NeuralNetwork<4>* net1, NeuralNetwork<4>* net2) {
-        NeuralNetwork<4> childNetwork;
-        init_instructions(childNetwork);
-        childNetwork.replaceLayer(2, GeneticAlgorithm::mergeLayers<6,3>(net1.getLayer<6,3>(2), net2.getLayer<6,3>(2)));
-        return childNetwork;
-    };*/
-    
-    // Prototype 2
-    // Main difference : we provide an already built new neuralnet and mergeLayers replace directly in childNetwork
     std::function<void(NeuralNetwork<4>&, NeuralNetwork<4>*, NeuralNetwork<4>*)> merging_instructions =
     [](NeuralNetwork<4>& child, NeuralNetwork<4>* parent1, NeuralNetwork<4>* parent2) {
         BaseGeneticAlgorithm::mergeLayers<NeuralNetwork<4>, NeuralLayer<6, 3>>(2, parent1, parent2, child);
@@ -127,9 +116,38 @@ int main(int argc, const char * argv[]) {
     };
     
     GeneticAlgorithm<4, 3, 1, 8, 100> ga (inputs, outputs, init_instructions);
-    NeuralNetwork<4>* bestnet = ga.trainNetworks(50, merging_instructions);
-    std::cout << *bestnet->process<3, 1>(Input);
+    ga.setPostActivationProcess(GeneticAlgorithm<4, 3, 1, 8, 100>::ACTIVATE_ROUND);
+    NeuralNetwork<4>* bestnet = ga.trainNetworks(500, merging_instructions,
+                                                 GeneticAlgorithm<4, 3, 1, 8, 100>::ERRORS_COUNT);
+    std::cout << GeneticAlgorithm<4, 3, 1, 8, 100>::ACTIVATE_ROUND(*bestnet->process<3, 1>(Input));
+    */
     
+    std::array<Matrix <float, 2, 1>, 4> inputs = {{ {{ {1,0} }}, {{ {0,0} }}, {{ {0,1} }}, {{ {1,1} }} }};
+    
+    std::array<Matrix <float, 1, 1>, 4> outputs = {{ {{ {1} }}, {{ {0} }}, {{ {0} }}, {{ {1} }} }};
+    
+    std::function<void(NeuralNetwork<3>&)> init_instructions = [](NeuralNetwork<3>& net) {
+        net.setFirstLayer<2>();
+        net.setLayer<2, 2>(2);
+        net.setLayer<1, 2>(3);
+    };
+    Matrix<float, 2, 1> Input = {{1, 0}};
+    //std::cout << *neuralnet.process<3, 1>(Input);
+    
+    std::function<void(NeuralNetwork<3>&, NeuralNetwork<3>*, NeuralNetwork<3>*)> merging_instructions =
+    [](NeuralNetwork<3>& child, NeuralNetwork<3>* parent1, NeuralNetwork<3>* parent2) {
+        BaseGeneticAlgorithm::mergeLayers<NeuralNetwork<3>, NeuralLayer<2, 2>>(2, parent1, parent2, child);
+        BaseGeneticAlgorithm::mergeLayers<NeuralNetwork<3>, NeuralLayer<2, 1>>(3, parent1, parent2, child);
+    };
+    
+    GeneticAlgorithm<3, 2, 1, 4, 100> ga (inputs, outputs, init_instructions);
+    //ga.setPostActivationProcess(GeneticAlgorithm<3, 2, 1, 4, 100>::ACTIVATE_ROUND);
+    /*NeuralNetwork<3>* bestnet = ga.trainNetworks(500, merging_instructions,
+                                                 GeneticAlgorithm<3, 2, 1, 4, 100>::ERRORS_COUNT);*/
+    NeuralNetwork<3>* bestnet = ga.trainNetworks(1000, merging_instructions,
+                                                 GeneticAlgorithm<3, 2, 1, 4, 100>::MSE);
+
+    std::cout << GeneticAlgorithm<3, 2, 1, 4, 100>::ACTIVATE_ROUND(*bestnet->process<2, 1>(Input));
     
     //char hello;
     //std::cin >> hello;

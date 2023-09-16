@@ -72,8 +72,17 @@ class GeneticAlgorithm : public BaseGeneticAlgorithm{
     std::function<void(NeuralNetwork<NBLAYERS>&)> NNInstructions;
     std::array<NeuralNetwork<NBLAYERS>*, POP_SIZE> networksPopulation;
     
+protected:
+    std::function<Matrix <float, OUTPUTNUMBER, 1>(Matrix <float, OUTPUTNUMBER, 1>)>* postactivation_process = nullptr;
+    
     
 public:
+    static std::function<float(std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH>, std::array< Matrix <float, OUTPUTNUMBER, 1> , TRAINING_LENGTH>)> MSE;
+    
+    static std::function<float(std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH>, std::array< Matrix <float, OUTPUTNUMBER, 1> , TRAINING_LENGTH>)> ERRORS_COUNT;
+    
+    static std::function<Matrix <float, OUTPUTNUMBER, 1>(Matrix <float, OUTPUTNUMBER, 1>)> ACTIVATE_ROUND;
+    
     inline GeneticAlgorithm(const std::array<Matrix <float, INPUTNUMBER, 1>, TRAINING_LENGTH> in, const std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH> out, const std::function<void(NeuralNetwork<NBLAYERS>&)> instructions) : inputs(in), outputs(out), NNInstructions(instructions) {
         for (std::size_t i(0); i < POP_SIZE; i++){
             networksPopulation[i] = new NeuralNetwork<NBLAYERS>;
@@ -89,6 +98,10 @@ public:
         }
     };
     
+    inline void setPostActivationProcess(std::function<Matrix <float, OUTPUTNUMBER, 1>(Matrix <float, OUTPUTNUMBER, 1>)> func){
+        postactivation_process = &func;
+    }
+    
     
     /*
      Choices about generation of new population :
@@ -97,26 +110,30 @@ public:
      */
     
     inline NeuralNetwork<NBLAYERS>* trainNetworks(const int iterations,
-        const std::function<void(NeuralNetwork<NBLAYERS>&, NeuralNetwork<NBLAYERS>*, NeuralNetwork<NBLAYERS>*)> merging_instructions){
+        const std::function<void(NeuralNetwork<NBLAYERS>&, NeuralNetwork<NBLAYERS>*, NeuralNetwork<NBLAYERS>*)> merging_instructions,
+        const std::function<float(std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH>, std::array< Matrix <float, OUTPUTNUMBER, 1> , TRAINING_LENGTH>)> evalfunc = GeneticAlgorithm<NBLAYERS, INPUTNUMBER, OUTPUTNUMBER, TRAINING_LENGTH, POP_SIZE>::MSE) {
         for (std::size_t iteration(1); iteration <= iterations; iteration++){
-            std::array< std::array< Matrix <float, OUTPUTNUMBER, 1>* , TRAINING_LENGTH>, POP_SIZE> localoutputs;
+            std::array< std::array< Matrix <float, OUTPUTNUMBER, 1> , TRAINING_LENGTH>, POP_SIZE> localoutputs;
             std::array< std::pair<float, NeuralNetwork<NBLAYERS>*>, POP_SIZE> MSE;
             for (std::size_t netid(0); netid < POP_SIZE; netid++){
                 float MSE_i = 0;
                 for (std::size_t inputid(0); inputid < TRAINING_LENGTH; inputid++){
-                    localoutputs[netid][inputid] = networksPopulation[netid]->template process<INPUTNUMBER, OUTPUTNUMBER>(inputs[inputid]);
-                    float localMSE(0);
+                    localoutputs[netid][inputid] = *(networksPopulation[netid]->template process<INPUTNUMBER, OUTPUTNUMBER>(inputs[inputid]));
+                    if (postactivation_process != nullptr)
+                        localoutputs[netid][inputid] = postactivation_process->operator()(localoutputs[netid][inputid]);
+                    //float localMSE(0);
                     //std::cout << "Processing MSE : Local output :";
                     //std::cout << *localoutputs[netid][inputid];
                     //std::cout << "Expected output :";
                     //std::cout << outputs[inputid];
-                    for (std::size_t outputIncr(0); outputIncr < OUTPUTNUMBER; outputIncr++){
+                    /*for (std::size_t outputIncr(0); outputIncr < OUTPUTNUMBER; outputIncr++){
                         localMSE += std::pow(localoutputs[netid][inputid]->read(outputIncr+1, 1) - outputs[inputid].read(outputIncr+1, 1), 2);
-                    }
-                    MSE_i += localMSE;
+                    }*/
+                    //MSE_i += localMSE;
                 }
-                MSE_i = MSE_i/POP_SIZE;
-                //std::cout << "MSE of " << MSE_i << std::endl;
+                //MSE_i = MSE_i/POP_SIZE;
+                MSE_i = evalfunc(outputs, localoutputs[netid]);
+                ///std::cout << "MSE of " << MSE_i << std::endl;
                 MSE[netid] = {MSE_i, networksPopulation[netid]};
             }
             std::sort(MSE.begin(), MSE.end());
