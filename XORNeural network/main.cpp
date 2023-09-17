@@ -136,18 +136,116 @@ int main(int argc, const char * argv[]) {
     
     std::function<void(NeuralNetwork<3>&, NeuralNetwork<3>*, NeuralNetwork<3>*)> merging_instructions =
     [](NeuralNetwork<3>& child, NeuralNetwork<3>* parent1, NeuralNetwork<3>* parent2) {
+        if (parent1 == parent2)
+            BaseGeneticAlgorithm::mergeLayers<NeuralNetwork<3>, NeuralLayer<2, 1>>(1, parent1, parent2, child);
+
         BaseGeneticAlgorithm::mergeLayers<NeuralNetwork<3>, NeuralLayer<2, 2>>(2, parent1, parent2, child);
-        BaseGeneticAlgorithm::mergeLayers<NeuralNetwork<3>, NeuralLayer<2, 1>>(3, parent1, parent2, child);
+        BaseGeneticAlgorithm::mergeLayers<NeuralNetwork<3>, NeuralLayer<1, 2>>(3, parent1, parent2, child);
+    };
+    
+    std::function<void(NeuralNetwork<3>*, NeuralNetwork<3>*)> debugfunc = [](NeuralNetwork<3>* net1, NeuralNetwork<3>* net2) {
+        std::cout << "Layer 1 : " << std::endl;
+        NeuralLayer<2, 1>* net1_layer1 = (NeuralLayer<2, 1>*)net1->getLayer(1);
+        NeuralLayer<2, 1>* net2_layer1 = nullptr;
+        if (net2 != nullptr)
+            NeuralLayer<2, 1>* net2_layer1 = (NeuralLayer<2, 1>*)net2->getLayer(1);
+
+        std::cout << "Biases : " << std::endl;
+        std::cout << *(net1_layer1->getBiasesAccess());
+        if (net2 != nullptr)
+            std::cout << *(net2_layer1->getBiasesAccess());
+        
+        std::cout << "Weights : " << std::endl;
+        std::cout << *(net1_layer1->getWeightsAccess());
+        if (net2 != nullptr)
+            std::cout << *(net2_layer1->getWeightsAccess());
+        
+        std::cout << "Previous Activationfunc : " << std::endl;
+        std::cout << *(net1_layer1->getPreviousActivationLayer());
+        if (net2 != nullptr)
+            std::cout << *(net2_layer1->getPreviousActivationLayer());
+        
+        std::cout << "Activationfunc : " << std::endl;
+        std::cout << *((Matrix<float, 2, 1>*)net1_layer1->getActivationLayer());
+        if (net2 != nullptr)
+            std::cout << *((Matrix<float, 2, 1>*)net2_layer1->getActivationLayer());
+        
+        std::cout << "\nLayer 2 : " << std::endl;
+        NeuralLayer<2, 2>* net1_layer2 = (NeuralLayer<2, 2>*)net1->getLayer(2);
+        NeuralLayer<2, 2>* net2_layer2 = nullptr;
+        if (net2 != nullptr)
+            NeuralLayer<2, 2>* net2_layer2 = (NeuralLayer<2, 2>*)net2->getLayer(2);
+        
+        std::cout << "Biases : " << std::endl;
+        std::cout << *(net1_layer2->getBiasesAccess());
+        if (net2 != nullptr)
+            std::cout << *(net2_layer2->getBiasesAccess());
+        
+        std::cout << "Weights : " << std::endl;
+        std::cout << *(net1_layer2->getWeightsAccess());
+        if (net2 != nullptr)
+            std::cout << *(net2_layer2->getWeightsAccess());
+        
+        std::cout << "Previous Activationfunc : " << std::endl;
+        std::cout << *(net1_layer2->getPreviousActivationLayer());
+        if (net2 != nullptr)
+            std::cout << *(net2_layer2->getPreviousActivationLayer());
+        
+        std::cout << "Activationfunc : " << std::endl;
+        std::cout << *((Matrix<float, 2, 2>*)net1_layer2->getActivationLayer());
+        if (net2 != nullptr)
+            std::cout << *((Matrix<float, 2, 2>*)net2_layer2->getActivationLayer());
+        
+        std::cout << "\nLayer 3 : " << std::endl;
+        NeuralLayer<1, 2>* net1_layer3 = (NeuralLayer<1, 2>*)net1->getLayer(3);
+        NeuralLayer<2, 1>* net2_layer3 = nullptr;
+        if (net2 != nullptr)
+            NeuralLayer<1, 2>* net2_layer3 = (NeuralLayer<1, 2>*)net2->getLayer(3);
+        
+        std::cout << "Biases : " << std::endl;
+        std::cout << *(net1_layer3->getBiasesAccess());
+        if (net2 != nullptr)
+            std::cout << *(net2_layer3->getBiasesAccess());
+        
+        std::cout << "Weights : " << std::endl;
+        std::cout << *(net1_layer3->getWeightsAccess());
+        if (net2 != nullptr)
+            std::cout << *(net2_layer3->getWeightsAccess());
+        
+        std::cout << "Previous Activation : " << std::endl;
+        std::cout << *(net1_layer3->getPreviousActivationLayer());
+        if (net2 != nullptr)
+            std::cout << *(net2_layer3->getPreviousActivationLayer());
+        
+        std::cout << "Activation : " << std::endl;
+        std::cout << *((Matrix<float, 1, 2>*)net1_layer3->getActivationLayer());
+        if (net2 != nullptr)
+            std::cout << *((Matrix<float, 1, 2>*)net2_layer3->getActivationLayer());
     };
     
     GeneticAlgorithm<3, 2, 1, 4, 100> ga (inputs, outputs, init_instructions);
+    //ga.setDebugFunction(debugfunc);
+    
     //ga.setPostActivationProcess(GeneticAlgorithm<3, 2, 1, 4, 100>::ACTIVATE_ROUND);
     /*NeuralNetwork<3>* bestnet = ga.trainNetworks(500, merging_instructions,
                                                  GeneticAlgorithm<3, 2, 1, 4, 100>::ERRORS_COUNT);*/
-    NeuralNetwork<3>* bestnet = ga.trainNetworks(1000, merging_instructions,
+    NeuralNetwork<3>* bestnet = ga.trainNetworks(500, merging_instructions,
                                                  GeneticAlgorithm<3, 2, 1, 4, 100>::MSE);
-
-    std::cout << GeneticAlgorithm<3, 2, 1, 4, 100>::ACTIVATE_ROUND(*bestnet->process<2, 1>(Input));
+    
+    
+    for (std::size_t inputid(0); inputid<4; inputid++){
+        std::cout << "Testing with " << std::endl;
+        std::cout << inputs[inputid];
+        std::cout << "Output :" << std::endl;
+        std::cout << *bestnet->process<2, 1>(inputs[inputid]);
+        std::cout << "Output expected :" << std::endl;
+        std::cout << outputs[inputid];
+    }
+    
+    //std::cout << "Debugging NN" << std::endl;
+    //debugfunc(bestnet, nullptr);
+    
+    //std::cout << GeneticAlgorithm<3, 2, 1, 4, 100>::ACTIVATE_ROUND(*bestnet->process<2, 1>(Input));
     
     //char hello;
     //std::cin >> hello;

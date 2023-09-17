@@ -91,6 +91,10 @@ public:
         return w_point;
     }
     
+    inline Matrix<float, PREVIOUS_NEURON_NUMBER, 1>* getPreviousActivationLayer (){
+        return previousActivationLayer;
+    }
+    
     inline void setPreviousActivationLayer(MatrixPrototype<float>* arg) {
         //std::cout << "Prev activ layer received : " << std::endl;
         Matrix<float, PREVIOUS_NEURON_NUMBER, 1>* prev(0);

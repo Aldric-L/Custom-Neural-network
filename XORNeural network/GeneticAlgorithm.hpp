@@ -27,38 +27,42 @@ public:
         NEURAL_LAYER_TYPE* parent2_layer = (NEURAL_LAYER_TYPE*)parent2->getLayer(layer);
         NEURAL_LAYER_TYPE* child_layer = (NEURAL_LAYER_TYPE*)child.getLayer(layer);
         
+        if (parent2_layer == parent1_layer){
+            *(child_layer->getWeightsAccess()) = *(parent2_layer->getWeightsAccess());
+            *(child_layer->getBiasesAccess()) = *(parent2_layer->getBiasesAccess());
+        }
+        
         // Biases :
         for (std::size_t row(0); row < child_layer->getNeuronNumber(); row++){
             if (row %2 == 0)
-                child_layer->getBiasesAccess()->operator()(row, 1) = parent1_layer->getBiasesAccess()->operator()(row, 1);
+                child_layer->getBiasesAccess()->operator()(row+1, 1) = parent1_layer->getBiasesAccess()->operator()(row+1, 1);
             else
-                child_layer->getBiasesAccess()->operator()(row, 1) = parent2_layer->getBiasesAccess()->operator()(row, 1);
+                child_layer->getBiasesAccess()->operator()(row+1, 1) = parent2_layer->getBiasesAccess()->operator()(row+1, 1);
             /*child_layer->getBiasesAccess()->operator()(row+1, 1) = (parent1_layer->getBiasesAccess()->operator()(row+1, 1)+parent2_layer->getBiasesAccess()->operator()(row+1, 1))/2;*/
         }
         /*if (parent2_layer != parent1_layer){
-            std::cout << "For instance, we had randomly in weights : " << std::endl;
-            std::cout << *(child_layer->getWeightsAccess());
+            std::cout << "For instance, we had randomly in biases : " << std::endl;
+            std::cout << *(child_layer->getBiasesAccess());
         }*/
         
         // weights :
         for (std::size_t row(0); row < child_layer->getNeuronNumber(); row++){
             for (std::size_t col(0); col < child_layer->getPreviousNeuronNumber(); col++){
-                if (((child_layer->getNeuronNumber() > 1) && (row+col) %2 == 0) || col%2==0)
-                    child_layer->getWeightsAccess()->operator()(row, col) = parent1_layer->getWeightsAccess()->operator()(row, col);
+                if ((row+col) %2 == 0)
+                    child_layer->getWeightsAccess()->operator()(row+1, col+1) = parent1_layer->getWeightsAccess()->operator()(row+1, col+1);
                 else
-                    child_layer->getWeightsAccess()->operator()(row, col) = parent2_layer->getWeightsAccess()->operator()(row, col);
+                    child_layer->getWeightsAccess()->operator()(row+1, col+1) = parent2_layer->getWeightsAccess()->operator()(row+1, col+1);
                 
                     /*child_layer->getWeightsAccess()->operator()(row+1, col+1) = (parent1_layer->getWeightsAccess()->operator()(row+1, col+1) + parent2_layer->getWeightsAccess()->operator()(row+1, col+1))/2;*/
             }
         }
-        
         /*if (parent2_layer != parent1_layer){
             std::cout << "Parent 1: " << std::endl;
-            std::cout << *(parent1_layer->getWeightsAccess());
+            std::cout << *(parent1_layer->getBiasesAccess());
             std::cout << "Parent 2: " << std::endl;
-            std::cout << *(parent2_layer->getWeightsAccess());
+            std::cout << *(parent2_layer->getBiasesAccess());
             std::cout << "Final : " << std::endl;
-            std::cout << *(child_layer->getWeightsAccess());
+            std::cout << *(child_layer->getBiasesAccess());
             
         }*/
     }
@@ -74,6 +78,7 @@ class GeneticAlgorithm : public BaseGeneticAlgorithm{
     
 protected:
     std::function<Matrix <float, OUTPUTNUMBER, 1>(Matrix <float, OUTPUTNUMBER, 1>)>* postactivation_process = nullptr;
+    std::function<void(NeuralNetwork<NBLAYERS>*, NeuralNetwork<NBLAYERS>*)>* debug_printer = nullptr;
     
     
 public:
@@ -102,6 +107,10 @@ public:
         postactivation_process = &func;
     }
     
+    inline void setDebugFunction(std::function<void(NeuralNetwork<NBLAYERS>*, NeuralNetwork<NBLAYERS>*)> func){
+        debug_printer = &func;
+    }
+    
     
     /*
      Choices about generation of new population :
@@ -121,27 +130,16 @@ public:
                     localoutputs[netid][inputid] = *(networksPopulation[netid]->template process<INPUTNUMBER, OUTPUTNUMBER>(inputs[inputid]));
                     if (postactivation_process != nullptr)
                         localoutputs[netid][inputid] = postactivation_process->operator()(localoutputs[netid][inputid]);
-                    //float localMSE(0);
-                    //std::cout << "Processing MSE : Local output :";
-                    //std::cout << *localoutputs[netid][inputid];
-                    //std::cout << "Expected output :";
-                    //std::cout << outputs[inputid];
-                    /*for (std::size_t outputIncr(0); outputIncr < OUTPUTNUMBER; outputIncr++){
-                        localMSE += std::pow(localoutputs[netid][inputid]->read(outputIncr+1, 1) - outputs[inputid].read(outputIncr+1, 1), 2);
-                    }*/
-                    //MSE_i += localMSE;
                 }
-                //MSE_i = MSE_i/POP_SIZE;
                 MSE_i = evalfunc(outputs, localoutputs[netid]);
-                ///std::cout << "MSE of " << MSE_i << std::endl;
+                //std::cout << "MSE of " << MSE_i << " - Retry : " << evalfunc(outputs, localoutputs[netid]) << " - NetAdress " << networksPopulation[netid] << std::endl;
                 MSE[netid] = {MSE_i, networksPopulation[netid]};
             }
-            std::sort(MSE.begin(), MSE.end());
-            std::reverse(MSE.begin(), MSE.end());
+            std::sort(MSE.begin(), MSE.end(), [](const std::pair<float, NeuralNetwork<NBLAYERS>*> &x, const std::pair<float, NeuralNetwork<NBLAYERS>*> &y){
+                 return x.first > y.first;
+             });
             std::array<NeuralNetwork<NBLAYERS>*, POP_SIZE> newNetworksPopulation;
-            
-            //std::cout << "\n\n\n\nTriage et reproduction" << std::endl;
-            
+                        
             float mean_MSE(0);
             for (std::size_t i(0); i < POP_SIZE; i++){
                 //std::cout << "Processing MSE=" << MSE[i].first << std::endl;
@@ -152,12 +150,23 @@ public:
                     //std::cout << "\nWe merge it" << std::endl;
                     newNetworksPopulation[i] = new NeuralNetwork<NBLAYERS>;
                     NNInstructions(*newNetworksPopulation[i]);
-                    merging_instructions(*newNetworksPopulation[i], networksPopulation[i-1], networksPopulation[i]);
+                    merging_instructions(*newNetworksPopulation[i], MSE[i-1].second, MSE[i].second);
                 }else if (std::round(5*POP_SIZE/6) <= i){
-                    //std::cout << "\nWe keep it" << std::endl;
+                    //std::cout << "\n\n -----Keeping MSE=" << MSE[i].first << std::endl;
                     newNetworksPopulation[i] = new NeuralNetwork<NBLAYERS>;
                     NNInstructions(*newNetworksPopulation[i]);
-                    merging_instructions(*newNetworksPopulation[i], networksPopulation[i], networksPopulation[i]);
+                    merging_instructions(*newNetworksPopulation[i], MSE[i].second, MSE[i].second);
+                        
+                        std::array< Matrix <float, OUTPUTNUMBER, 1> , TRAINING_LENGTH> temp_output;
+                        for (std::size_t inputid(0); inputid < TRAINING_LENGTH; inputid++){
+                            temp_output[inputid] = *(newNetworksPopulation[i]->template process<INPUTNUMBER, OUTPUTNUMBER>(inputs[inputid]));
+                            if (postactivation_process != nullptr)
+                                temp_output[inputid] = postactivation_process->operator()(temp_output[inputid]);
+                        }
+                    
+                    if (debug_printer != nullptr)
+                        debug_printer->operator()(MSE[i].second, newNetworksPopulation[i]);
+                    
                 }
                 mean_MSE += MSE[i].first;
             }
