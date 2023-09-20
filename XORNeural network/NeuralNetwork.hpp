@@ -9,7 +9,6 @@
 #define NeuralNetwork_hpp
 
 #include <stdio.h>
-#include <vector>
 #include <array>
 #include <string>
 #include <stdexcept>
@@ -23,12 +22,13 @@ class NeuralNetwork {
 
     
 public:
+    const std::string customOriginField;
     static std::function<float(float)> SIGMOID;
     static std::function<float(float)> NO_ACTION;
     
     std::array<AbstractNeuralLayer*, NBLAYERS> layers;
     
-    inline NeuralNetwork() {
+    inline NeuralNetwork(std::string customOriginField="") : customOriginField(customOriginField) {
         for (std::size_t i(0); i < NBLAYERS; i++){
             layers[i] = nullptr;
         }
@@ -40,6 +40,8 @@ public:
                 delete layers[i];
         }
     };
+    
+    inline std::string getCustomOriginField(){ return customOriginField; }
     
     template <std::size_t INPUTNUMBER>
     inline NeuralLayer<INPUTNUMBER, 1>* setFirstLayer(){
@@ -83,10 +85,7 @@ public:
             layers[i]->setPreviousActivationLayer(layers[i-1]->getActivationLayer());
         }
         
-        Matrix<float, OUTPUTNUMBER, 1>* activLayer(0);
-        activLayer = (Matrix<float, OUTPUTNUMBER, 1>*)layers[NBLAYERS-1]->getActivationLayer();
-        //std::cout << *activLayer;
-        return activLayer;
+        return  (Matrix<float, OUTPUTNUMBER, 1>*)layers[NBLAYERS-1]->getActivationLayer();
     }
 };
 

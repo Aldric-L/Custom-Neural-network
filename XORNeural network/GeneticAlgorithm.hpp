@@ -7,19 +7,21 @@
 #ifndef GeneticAlgorithm_hpp
 #define GeneticAlgorithm_hpp
 
+#include <iostream>
 #include <stdio.h>
 #include <cmath>
 #include <functional>
 #include <array>
 #include <algorithm>
+#include <random>
+#include <string>
 #include <utility>
 
 #include "NeuralNetwork.hpp"
 #include "NeuralLayer.hpp"
 #include "Matrix.hpp"
 
-class BaseGeneticAlgorithm {
-    
+class GeneticAlgorithmMethods {
 public:
     template <typename NEURAL_NET_TYPE, typename NEURAL_LAYER_TYPE>
     static void mergeLayers(const std::size_t layer, NEURAL_NET_TYPE* parent1, NEURAL_NET_TYPE* parent2, NEURAL_NET_TYPE& child){
@@ -30,7 +32,11 @@ public:
         if (parent2_layer == parent1_layer){
             *(child_layer->getWeightsAccess()) = *(parent2_layer->getWeightsAccess());
             *(child_layer->getBiasesAccess()) = *(parent2_layer->getBiasesAccess());
+            return;
         }
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::normal_distribution<double> distribution(0.0,0.15);
         
         // Biases :
         for (std::size_t row(0); row < child_layer->getNeuronNumber(); row++){
@@ -39,6 +45,8 @@ public:
             else
                 child_layer->getBiasesAccess()->operator()(row+1, 1) = parent2_layer->getBiasesAccess()->operator()(row+1, 1);
             /*child_layer->getBiasesAccess()->operator()(row+1, 1) = (parent1_layer->getBiasesAccess()->operator()(row+1, 1)+parent2_layer->getBiasesAccess()->operator()(row+1, 1))/2;*/
+            child_layer->getBiasesAccess()->operator()(row+1, 1) = child_layer->getBiasesAccess()->operator()(row+1, 1) * (1+distribution(gen));
+
         }
         /*if (parent2_layer != parent1_layer){
             std::cout << "For instance, we had randomly in biases : " << std::endl;
@@ -54,6 +62,8 @@ public:
                     child_layer->getWeightsAccess()->operator()(row+1, col+1) = parent2_layer->getWeightsAccess()->operator()(row+1, col+1);
                 
                     /*child_layer->getWeightsAccess()->operator()(row+1, col+1) = (parent1_layer->getWeightsAccess()->operator()(row+1, col+1) + parent2_layer->getWeightsAccess()->operator()(row+1, col+1))/2;*/
+                
+                    child_layer->getWeightsAccess()->operator()(row+1, col+1) = child_layer->getWeightsAccess()->operator()(row+1, col+1) * (1+distribution(gen));
             }
         }
         /*if (parent2_layer != parent1_layer){
@@ -68,35 +78,25 @@ public:
     }
 };
 
-
-template <size_t NBLAYERS, size_t INPUTNUMBER, size_t OUTPUTNUMBER, size_t TRAINING_LENGTH, size_t POP_SIZE=20>
-class GeneticAlgorithm : public BaseGeneticAlgorithm{
-    std::array<Matrix <float, INPUTNUMBER, 1>, TRAINING_LENGTH> inputs;
-    std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH> outputs;
+template <size_t NBLAYERS, size_t INPUTNUMBER, size_t OUTPUTNUMBER, size_t POP_SIZE=20>
+class BaseGeneticAlgorithm : public GeneticAlgorithmMethods {
+protected:
     std::function<void(NeuralNetwork<NBLAYERS>&)> NNInstructions;
     std::array<NeuralNetwork<NBLAYERS>*, POP_SIZE> networksPopulation;
-    
-protected:
     std::function<Matrix <float, OUTPUTNUMBER, 1>(Matrix <float, OUTPUTNUMBER, 1>)>* postactivation_process = nullptr;
     std::function<void(NeuralNetwork<NBLAYERS>*, NeuralNetwork<NBLAYERS>*)>* debug_printer = nullptr;
     
-    
 public:
-    static std::function<float(std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH>, std::array< Matrix <float, OUTPUTNUMBER, 1> , TRAINING_LENGTH>)> MSE;
-    
-    static std::function<float(std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH>, std::array< Matrix <float, OUTPUTNUMBER, 1> , TRAINING_LENGTH>)> ERRORS_COUNT;
-    
     static std::function<Matrix <float, OUTPUTNUMBER, 1>(Matrix <float, OUTPUTNUMBER, 1>)> ACTIVATE_ROUND;
-    
-    inline GeneticAlgorithm(const std::array<Matrix <float, INPUTNUMBER, 1>, TRAINING_LENGTH> in, const std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH> out, const std::function<void(NeuralNetwork<NBLAYERS>&)> instructions) : inputs(in), outputs(out), NNInstructions(instructions) {
+
+    inline BaseGeneticAlgorithm(const std::function<void(NeuralNetwork<NBLAYERS>&)> instructions) : NNInstructions(instructions){
         for (std::size_t i(0); i < POP_SIZE; i++){
-            networksPopulation[i] = new NeuralNetwork<NBLAYERS>;
+            networksPopulation[i] = new NeuralNetwork<NBLAYERS> (std::string("RANDOM_INIT"));
             NNInstructions(*networksPopulation[i]);
         }
-        
-    };
+    }
     
-    inline ~GeneticAlgorithm() {
+    inline ~BaseGeneticAlgorithm() {
         for (std::size_t i(0); i < POP_SIZE; i++){
             if (networksPopulation[i] != nullptr)
                 delete networksPopulation[i];
@@ -111,11 +111,72 @@ public:
         debug_printer = &func;
     }
     
+    inline std::array<NeuralNetwork<NBLAYERS>*, POP_SIZE> getNetworksPopulation() {
+        return networksPopulation;
+    }
+    
+    inline void generateNewGeneration(const std::array< std::pair<float, NeuralNetwork<NBLAYERS>*>, POP_SIZE>& MSE, std::size_t iteration,
+                                      const std::function<void(NeuralNetwork<NBLAYERS>&, NeuralNetwork<NBLAYERS>*, NeuralNetwork<NBLAYERS>*)> merging_instructions) {
+        std::array<NeuralNetwork<NBLAYERS>*, POP_SIZE> newNetworksPopulation;
+        
+        float mean_MSE(0);
+        for (std::size_t i(0); i < std::round(0.5*POP_SIZE/6); i++){
+            newNetworksPopulation[i] = new NeuralNetwork<NBLAYERS> (std::string("RANDOM_") + std::to_string(iteration));
+            NNInstructions(*newNetworksPopulation[i]);
+            mean_MSE += MSE[i].first;
+        }
+        for (std::size_t i(std::round(0.5*POP_SIZE/6)); i < std::round(7*POP_SIZE/8); i++){
+            newNetworksPopulation[i] = new NeuralNetwork<NBLAYERS> (std::string("CHILD_") + std::to_string(iteration));
+            NNInstructions(*newNetworksPopulation[i]);
+            merging_instructions(*newNetworksPopulation[i],
+                                 MSE[POP_SIZE-i-1].second,
+                                 MSE[POP_SIZE-i].second);
+            mean_MSE += MSE[i].first;
+        }
+        for (std::size_t i(std::round(7*POP_SIZE/8)); i < POP_SIZE; i++){
+            newNetworksPopulation[i] = new NeuralNetwork<NBLAYERS> (MSE[i].second->getCustomOriginField());
+            NNInstructions(*newNetworksPopulation[i]);
+            merging_instructions(*newNetworksPopulation[i], MSE[i].second, MSE[i].second);
+            mean_MSE += MSE[i].first;
+                
+            if (debug_printer != nullptr)
+                debug_printer->operator()(MSE[i].second, newNetworksPopulation[i]);
+        }
+        mean_MSE = mean_MSE/POP_SIZE;
+        std::cout << "Best MSE = " << MSE[POP_SIZE-1].first << " - Mean=" << mean_MSE << " - Origin: " << MSE[POP_SIZE-1].second->getCustomOriginField() << std::endl;
+        for (std::size_t i(0); i < POP_SIZE; i++){
+            delete networksPopulation[i];
+            networksPopulation[i] = newNetworksPopulation[i];
+        }
+    }
+};
+
+template <size_t NBLAYERS, size_t INPUTNUMBER, size_t OUTPUTNUMBER, size_t POP_SIZE=20>
+class ManualGeneticAlgorithm : public BaseGeneticAlgorithm<NBLAYERS, INPUTNUMBER, POP_SIZE>{
+    
+};
+
+template <size_t NBLAYERS, size_t INPUTNUMBER, size_t OUTPUTNUMBER, size_t TRAINING_LENGTH, size_t POP_SIZE=20>
+class GeneticAlgorithm : public BaseGeneticAlgorithm<NBLAYERS, INPUTNUMBER, OUTPUTNUMBER, POP_SIZE> {
+protected:
+    std::array<Matrix <float, INPUTNUMBER, 1>, TRAINING_LENGTH> inputs;
+    std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH> outputs;
+    
+    
+public:
+    static std::function<float(std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH>, std::array< Matrix <float, OUTPUTNUMBER, 1> , TRAINING_LENGTH>)> MSE;
+    static std::function<float(std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH>, std::array< Matrix <float, OUTPUTNUMBER, 1> , TRAINING_LENGTH>)> ERRORS_COUNT;
+    
+    
+    inline GeneticAlgorithm(const std::array<Matrix <float, INPUTNUMBER, 1>, TRAINING_LENGTH> in, const std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH> out, const std::function<void(NeuralNetwork<NBLAYERS>&)> instructions) : BaseGeneticAlgorithm<NBLAYERS, INPUTNUMBER, OUTPUTNUMBER, POP_SIZE>(instructions), inputs(in), outputs(out) {
+    };
+    
     
     /*
      Choices about generation of new population :
-     Top 2/3 is selected. They multiply and their offspring represents less than 2/3 of new generation
-     The remainder is generated randomly (introduction of immigration)
+     Flop 1/12 is replaced by new networks generated randomly (introduction of immigration)
+     Top (7/8-1/12) is selected and multiplied so that their offspring represents less than 2/3 of new generation
+     The remainder is generated using former top players
      */
     
     inline NeuralNetwork<NBLAYERS>* trainNetworks(const int iterations,
@@ -127,57 +188,24 @@ public:
             for (std::size_t netid(0); netid < POP_SIZE; netid++){
                 float MSE_i = 0;
                 for (std::size_t inputid(0); inputid < TRAINING_LENGTH; inputid++){
-                    localoutputs[netid][inputid] = *(networksPopulation[netid]->template process<INPUTNUMBER, OUTPUTNUMBER>(inputs[inputid]));
-                    if (postactivation_process != nullptr)
-                        localoutputs[netid][inputid] = postactivation_process->operator()(localoutputs[netid][inputid]);
+                    localoutputs[netid][inputid] = *(this->networksPopulation[netid]->template process<INPUTNUMBER, OUTPUTNUMBER>(inputs[inputid]));
+                    if (this->postactivation_process != nullptr)
+                        localoutputs[netid][inputid] = this->postactivation_process->operator()(localoutputs[netid][inputid]);
                 }
                 MSE_i = evalfunc(outputs, localoutputs[netid]);
-                //std::cout << "MSE of " << MSE_i << " - Retry : " << evalfunc(outputs, localoutputs[netid]) << " - NetAdress " << networksPopulation[netid] << std::endl;
-                MSE[netid] = {MSE_i, networksPopulation[netid]};
+                MSE[netid] = {MSE_i, this->networksPopulation[netid]};
             }
             std::sort(MSE.begin(), MSE.end(), [](const std::pair<float, NeuralNetwork<NBLAYERS>*> &x, const std::pair<float, NeuralNetwork<NBLAYERS>*> &y){
                  return x.first > y.first;
              });
-            std::array<NeuralNetwork<NBLAYERS>*, POP_SIZE> newNetworksPopulation;
-                        
-            float mean_MSE(0);
-            for (std::size_t i(0); i < POP_SIZE; i++){
-                //std::cout << "Processing MSE=" << MSE[i].first << std::endl;
-                if (i < std::round(POP_SIZE/6)){
-                    newNetworksPopulation[i] = new NeuralNetwork<NBLAYERS>;
-                    NNInstructions(*newNetworksPopulation[i]);
-                }else if (std::round(POP_SIZE/6) <= i && i < std::round(5*POP_SIZE/6)) {
-                    //std::cout << "\nWe merge it" << std::endl;
-                    newNetworksPopulation[i] = new NeuralNetwork<NBLAYERS>;
-                    NNInstructions(*newNetworksPopulation[i]);
-                    merging_instructions(*newNetworksPopulation[i], MSE[i-1].second, MSE[i].second);
-                }else if (std::round(5*POP_SIZE/6) <= i){
-                    //std::cout << "\n\n -----Keeping MSE=" << MSE[i].first << std::endl;
-                    newNetworksPopulation[i] = new NeuralNetwork<NBLAYERS>;
-                    NNInstructions(*newNetworksPopulation[i]);
-                    merging_instructions(*newNetworksPopulation[i], MSE[i].second, MSE[i].second);
-                        
-                        std::array< Matrix <float, OUTPUTNUMBER, 1> , TRAINING_LENGTH> temp_output;
-                        for (std::size_t inputid(0); inputid < TRAINING_LENGTH; inputid++){
-                            temp_output[inputid] = *(newNetworksPopulation[i]->template process<INPUTNUMBER, OUTPUTNUMBER>(inputs[inputid]));
-                            if (postactivation_process != nullptr)
-                                temp_output[inputid] = postactivation_process->operator()(temp_output[inputid]);
-                        }
-                    
-                    if (debug_printer != nullptr)
-                        debug_printer->operator()(MSE[i].second, newNetworksPopulation[i]);
-                    
-                }
-                mean_MSE += MSE[i].first;
-            }
-            std::cout << "Best MSE = " << MSE[POP_SIZE-1].first << " - Mean=" << mean_MSE/POP_SIZE << std::endl;
-            for (std::size_t i(0); i < POP_SIZE; i++){
-                delete networksPopulation[i];
-                networksPopulation[i] = newNetworksPopulation[i];
-            }
+            
+            this->generateNewGeneration(MSE, iteration, merging_instructions);
+            
+            if (MSE[POP_SIZE-1].first == 0)
+                break;
         }
         
-        return networksPopulation[POP_SIZE-1];
+        return this->networksPopulation[POP_SIZE-1];
         
     }
     

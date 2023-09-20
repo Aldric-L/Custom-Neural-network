@@ -30,255 +30,10 @@
             filePath = "XORNeural network/GeneticAlgorithm.hpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "178"
-            endingLineNumber = "178"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "1D80E07E-A054-4534-BFDC-BF0DB4B26F1B"
-            shouldBeEnabled = "No"
-            nameForDebugger = "coucou"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "XORNeural network/GeneticAlgorithm.hpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
-            landmarkName = "GeneticAlgorithm"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  uuid = "1D80E07E-A054-4534-BFDC-BF0DB4B26F1B - 5c1b5bd433dd0b2"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GeneticAlgorithm&lt;3ul, 2ul, 1ul, 4ul, 4ul&gt;::trainNetworks(int, std::__1::function&lt;void (NeuralNetwork&lt;3ul&gt;&amp;, NeuralNetwork&lt;3ul&gt;*, NeuralNetwork&lt;3ul&gt;*)&gt;, std::__1::function&lt;float (std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;, std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;)&gt;)"
-                  moduleName = "XORNeural network"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/GeneticAlgorithm.hpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "187"
-                  endingLineNumber = "187"
-                  offsetFromSymbolStart = "2320">
-               </Location>
-               <Location
-                  uuid = "1D80E07E-A054-4534-BFDC-BF0DB4B26F1B - 5c1b5bd433dd0b2"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GeneticAlgorithm&lt;3ul, 2ul, 1ul, 4ul, 4ul&gt;::trainNetworks(int, std::__1::function&lt;void (NeuralNetwork&lt;3ul&gt;&amp;, NeuralNetwork&lt;3ul&gt;*, NeuralNetwork&lt;3ul&gt;*)&gt;, std::__1::function&lt;float (std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;, std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;)&gt;)"
-                  moduleName = "XORNeural network"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/GeneticAlgorithm.hpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "187"
-                  endingLineNumber = "187"
-                  offsetFromSymbolStart = "2296">
-               </Location>
-               <Location
-                  uuid = "1D80E07E-A054-4534-BFDC-BF0DB4B26F1B - 48d2ee49093b028"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GeneticAlgorithm&lt;3ul, 2ul, 1ul, 4ul, 20ul&gt;::trainNetworks(int, std::__1::function&lt;void (NeuralNetwork&lt;3ul&gt;&amp;, NeuralNetwork&lt;3ul&gt;*, NeuralNetwork&lt;3ul&gt;*)&gt;, std::__1::function&lt;float (std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;, std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;)&gt;)"
-                  moduleName = "XORNeural network"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/GeneticAlgorithm.hpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "184"
-                  endingLineNumber = "184"
-                  offsetFromSymbolStart = "2272">
-               </Location>
-               <Location
-                  uuid = "1D80E07E-A054-4534-BFDC-BF0DB4B26F1B - 48d2ee49093b0f7"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GeneticAlgorithm&lt;3ul, 2ul, 1ul, 4ul, 20ul&gt;::trainNetworks(int, std::__1::function&lt;void (NeuralNetwork&lt;3ul&gt;&amp;, NeuralNetwork&lt;3ul&gt;*, NeuralNetwork&lt;3ul&gt;*)&gt;, std::__1::function&lt;float (std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;, std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;)&gt;)"
-                  moduleName = "XORNeural network"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/GeneticAlgorithm.hpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "185"
-                  endingLineNumber = "185"
-                  offsetFromSymbolStart = "2236">
-               </Location>
-               <Location
-                  uuid = "1D80E07E-A054-4534-BFDC-BF0DB4B26F1B - 48d2ee49093b0f7"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GeneticAlgorithm&lt;3ul, 2ul, 1ul, 4ul, 20ul&gt;::trainNetworks(int, std::__1::function&lt;void (NeuralNetwork&lt;3ul&gt;&amp;, NeuralNetwork&lt;3ul&gt;*, NeuralNetwork&lt;3ul&gt;*)&gt;, std::__1::function&lt;float (std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;, std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;)&gt;)"
-                  moduleName = "XORNeural network"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/GeneticAlgorithm.hpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "185"
-                  endingLineNumber = "185"
-                  offsetFromSymbolStart = "2272">
-               </Location>
-               <Location
-                  uuid = "1D80E07E-A054-4534-BFDC-BF0DB4B26F1B - 48d2ee49093b0d6"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GeneticAlgorithm&lt;3ul, 2ul, 1ul, 4ul, 20ul&gt;::trainNetworks(int, std::__1::function&lt;void (NeuralNetwork&lt;3ul&gt;&amp;, NeuralNetwork&lt;3ul&gt;*, NeuralNetwork&lt;3ul&gt;*)&gt;, std::__1::function&lt;float (std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;, std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;)&gt;)"
-                  moduleName = "XORNeural network"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/GeneticAlgorithm.hpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "186"
-                  endingLineNumber = "186"
-                  offsetFromSymbolStart = "2452">
-               </Location>
-               <Location
-                  uuid = "1D80E07E-A054-4534-BFDC-BF0DB4B26F1B - 5c1b5bd433dd0d1"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GeneticAlgorithm&lt;3ul, 2ul, 1ul, 4ul, 5ul&gt;::trainNetworks(int, std::__1::function&lt;void (NeuralNetwork&lt;3ul&gt;&amp;, NeuralNetwork&lt;3ul&gt;*, NeuralNetwork&lt;3ul&gt;*)&gt;, std::__1::function&lt;float (std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;, std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;)&gt;)"
-                  moduleName = "XORNeural network"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/GeneticAlgorithm.hpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "186"
-                  endingLineNumber = "186"
-                  offsetFromSymbolStart = "2452">
-               </Location>
-               <Location
-                  uuid = "1D80E07E-A054-4534-BFDC-BF0DB4B26F1B - 48d2ee49093b0d6"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GeneticAlgorithm&lt;3ul, 2ul, 1ul, 4ul, 21ul&gt;::trainNetworks(int, std::__1::function&lt;void (NeuralNetwork&lt;3ul&gt;&amp;, NeuralNetwork&lt;3ul&gt;*, NeuralNetwork&lt;3ul&gt;*)&gt;, std::__1::function&lt;float (std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;, std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;)&gt;)"
-                  moduleName = "XORNeural network"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/GeneticAlgorithm.hpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "186"
-                  endingLineNumber = "186"
-                  offsetFromSymbolStart = "2472">
-               </Location>
-               <Location
-                  uuid = "1D80E07E-A054-4534-BFDC-BF0DB4B26F1B - 5c1b5bd433dd0d1"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GeneticAlgorithm&lt;3ul, 2ul, 1ul, 4ul, 6ul&gt;::trainNetworks(int, std::__1::function&lt;void (NeuralNetwork&lt;3ul&gt;&amp;, NeuralNetwork&lt;3ul&gt;*, NeuralNetwork&lt;3ul&gt;*)&gt;, std::__1::function&lt;float (std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;, std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;)&gt;)"
-                  moduleName = "XORNeural network"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/GeneticAlgorithm.hpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "186"
-                  endingLineNumber = "186"
-                  offsetFromSymbolStart = "2452">
-               </Location>
-               <Location
-                  uuid = "1D80E07E-A054-4534-BFDC-BF0DB4B26F1B - 5c1b5bd433dd0d1"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GeneticAlgorithm&lt;3ul, 2ul, 1ul, 4ul, 6ul&gt;::trainNetworks(int, std::__1::function&lt;void (NeuralNetwork&lt;3ul&gt;&amp;, NeuralNetwork&lt;3ul&gt;*, NeuralNetwork&lt;3ul&gt;*)&gt;, std::__1::function&lt;float (std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;, std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;)&gt;)"
-                  moduleName = "XORNeural network"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/GeneticAlgorithm.hpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "186"
-                  endingLineNumber = "186"
-                  offsetFromSymbolStart = "2448">
-               </Location>
-               <Location
-                  uuid = "1D80E07E-A054-4534-BFDC-BF0DB4B26F1B - 5c1b5bd433dd365"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GeneticAlgorithm&lt;3ul, 2ul, 1ul, 4ul, 6ul&gt;::trainNetworks(int, std::__1::function&lt;void (NeuralNetwork&lt;3ul&gt;&amp;, NeuralNetwork&lt;3ul&gt;*, NeuralNetwork&lt;3ul&gt;*)&gt;, std::__1::function&lt;float (std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;, std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;)&gt;)"
-                  moduleName = "XORNeural network"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/GeneticAlgorithm.hpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "174"
-                  endingLineNumber = "174"
-                  offsetFromSymbolStart = "2168">
-               </Location>
-               <Location
-                  uuid = "1D80E07E-A054-4534-BFDC-BF0DB4B26F1B - 5c1b5bd433dd365"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GeneticAlgorithm&lt;3ul, 2ul, 1ul, 4ul, 6ul&gt;::trainNetworks(int, std::__1::function&lt;void (NeuralNetwork&lt;3ul&gt;&amp;, NeuralNetwork&lt;3ul&gt;*, NeuralNetwork&lt;3ul&gt;*)&gt;, std::__1::function&lt;float (std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;, std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;)&gt;)"
-                  moduleName = "XORNeural network"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/GeneticAlgorithm.hpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "174"
-                  endingLineNumber = "174"
-                  offsetFromSymbolStart = "1856">
-               </Location>
-               <Location
-                  uuid = "1D80E07E-A054-4534-BFDC-BF0DB4B26F1B - 48d2ee49093b362"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GeneticAlgorithm&lt;3ul, 2ul, 1ul, 4ul, 20ul&gt;::trainNetworks(int, std::__1::function&lt;void (NeuralNetwork&lt;3ul&gt;&amp;, NeuralNetwork&lt;3ul&gt;*, NeuralNetwork&lt;3ul&gt;*)&gt;, std::__1::function&lt;float (std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;, std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;)&gt;)"
-                  moduleName = "XORNeural network"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/GeneticAlgorithm.hpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "174"
-                  endingLineNumber = "174"
-                  offsetFromSymbolStart = "1920">
-               </Location>
-               <Location
-                  uuid = "1D80E07E-A054-4534-BFDC-BF0DB4B26F1B - a0d4d1ac61c50fb1"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GeneticAlgorithm&lt;3ul, 2ul, 1ul, 4ul, 100ul&gt;::trainNetworks(int, std::__1::function&lt;void (NeuralNetwork&lt;3ul&gt;&amp;, NeuralNetwork&lt;3ul&gt;*, NeuralNetwork&lt;3ul&gt;*)&gt;, std::__1::function&lt;float (std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;, std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;)&gt;)"
-                  moduleName = "XORNeural network"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/GeneticAlgorithm.hpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "174"
-                  endingLineNumber = "174"
-                  offsetFromSymbolStart = "1880">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "1747B0BF-9B78-443A-A8C3-41BE389FBDB6"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "XORNeural network/GeneticAlgorithm.hpp"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "175"
-            endingLineNumber = "175"
-            landmarkName = "GeneticAlgorithm"
-            landmarkType = "3">
+            startingLineNumber = "206"
+            endingLineNumber = "206"
+            landmarkName = "trainNetworks(iterations, merging_instructions, MSE)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -291,8 +46,8 @@
             filePath = "XORNeural network/main.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "249"
-            endingLineNumber = "249"
+            startingLineNumber = "261"
+            endingLineNumber = "261"
             landmarkName = "main(argc, argv)"
             landmarkType = "9">
          </BreakpointContent>
@@ -300,49 +55,65 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "265FB3EA-F043-43E0-ABE5-3D1A400C19D6"
+            uuid = "5E208008-73A4-45E2-BE45-12A9654D2C1A"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "XORNeural network/main.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "110"
+            endingLineNumber = "110"
+            landmarkName = "main(argc, argv)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5E53991D-6B46-441E-B14D-351703E076E9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "XORNeural network/main.cpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "109"
+            endingLineNumber = "109"
+            landmarkName = "main(argc, argv)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D07373B8-6FF8-48F9-9C1E-A9661EBFDC69"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "XORNeural network/GeneticAlgorithm.hpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "141"
-            endingLineNumber = "141"
-            landmarkName = "trainNetworks(iterations, merging_instructions, MSE)"
+            startingLineNumber = "24"
+            endingLineNumber = "24"
+            landmarkName = "GeneticAlgorithmMethods"
+            landmarkType = "3">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "70085A93-973E-474A-AA42-1D4A1599CBE4"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "XORNeural network/NeuralNetwork.hpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "87"
+            endingLineNumber = "87"
+            landmarkName = "process(input)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "265FB3EA-F043-43E0-ABE5-3D1A400C19D6 - 5c1b5bd433dcf47"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GeneticAlgorithm&lt;3ul, 2ul, 1ul, 4ul, 4ul&gt;::trainNetworks(int, std::__1::function&lt;void (NeuralNetwork&lt;3ul&gt;&amp;, NeuralNetwork&lt;3ul&gt;*, NeuralNetwork&lt;3ul&gt;*)&gt;, std::__1::function&lt;float (std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;, std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;)&gt;)"
-                  moduleName = "XORNeural network"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/GeneticAlgorithm.hpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "144"
-                  endingLineNumber = "144"
-                  offsetFromSymbolStart = "700">
-               </Location>
-               <Location
-                  uuid = "265FB3EA-F043-43E0-ABE5-3D1A400C19D6 - 5c1b5bd433dcf28"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "GeneticAlgorithm&lt;3ul, 2ul, 1ul, 4ul, 4ul&gt;::trainNetworks(int, std::__1::function&lt;void (NeuralNetwork&lt;3ul&gt;&amp;, NeuralNetwork&lt;3ul&gt;*, NeuralNetwork&lt;3ul&gt;*)&gt;, std::__1::function&lt;float (std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;, std::__1::array&lt;Matrix&lt;float, 1ul, 1ul&gt;, 4ul&gt;)&gt;)"
-                  moduleName = "XORNeural network"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/GeneticAlgorithm.hpp"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "145"
-                  endingLineNumber = "145"
-                  offsetFromSymbolStart = "708">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

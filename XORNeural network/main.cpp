@@ -89,7 +89,7 @@ int main(int argc, const char * argv[]) {
     
     
     //XOR with dim3
-    /*std::array<Matrix <float, 3, 1>, 8> inputs =
+    std::array<Matrix <float, 3, 1>, 8> inputs =
     {{ {{ {1,0,0} }}, {{ {0,0,1} }}, {{ {0,1,0} }},
        {{ {1,1,0} }}, {{ {1,0,1} }}, {{ {1,1,0} }},
        {{ {0,0,0} }}, {{ {1,1,1} }} }};
@@ -105,24 +105,36 @@ int main(int argc, const char * argv[]) {
         net.setLayer<3, 6>(3);
         net.setLayer<1, 3>(4);
     };
-    Matrix<float, 3, 1> Input = {{1, 0, 1}};
-    std::cout << *neuralnet.process<3, 1>(Input);
+    //Matrix<float, 3, 1> Input = {{1, 0, 1}};
+    //std::cout << *neuralnet.process<3, 1>(Input);
     
     std::function<void(NeuralNetwork<4>&, NeuralNetwork<4>*, NeuralNetwork<4>*)> merging_instructions =
     [](NeuralNetwork<4>& child, NeuralNetwork<4>* parent1, NeuralNetwork<4>* parent2) {
-        BaseGeneticAlgorithm::mergeLayers<NeuralNetwork<4>, NeuralLayer<6, 3>>(2, parent1, parent2, child);
-        BaseGeneticAlgorithm::mergeLayers<NeuralNetwork<4>, NeuralLayer<3, 6>>(3, parent1, parent2, child);
-        BaseGeneticAlgorithm::mergeLayers<NeuralNetwork<4>, NeuralLayer<1, 3>>(4, parent1, parent2, child);
+        if (parent1 == parent2)
+            GeneticAlgorithmMethods::mergeLayers<NeuralNetwork<4>, NeuralLayer<3, 1>>(1, parent1, parent2, child);
+        GeneticAlgorithmMethods::mergeLayers<NeuralNetwork<4>, NeuralLayer<6, 3>>(2, parent1, parent2, child);
+        GeneticAlgorithmMethods::mergeLayers<NeuralNetwork<4>, NeuralLayer<3, 6>>(3, parent1, parent2, child);
+        GeneticAlgorithmMethods::mergeLayers<NeuralNetwork<4>, NeuralLayer<1, 3>>(4, parent1, parent2, child);
     };
     
-    GeneticAlgorithm<4, 3, 1, 8, 100> ga (inputs, outputs, init_instructions);
-    ga.setPostActivationProcess(GeneticAlgorithm<4, 3, 1, 8, 100>::ACTIVATE_ROUND);
+    GeneticAlgorithm<4, 3, 1, 8, 500> ga (inputs, outputs, init_instructions);
+    //ga.setPostActivationProcess(GeneticAlgorithm<4, 3, 1, 8, 100>::ACTIVATE_ROUND);
     NeuralNetwork<4>* bestnet = ga.trainNetworks(500, merging_instructions,
-                                                 GeneticAlgorithm<4, 3, 1, 8, 100>::ERRORS_COUNT);
-    std::cout << GeneticAlgorithm<4, 3, 1, 8, 100>::ACTIVATE_ROUND(*bestnet->process<3, 1>(Input));
-    */
+                                                 GeneticAlgorithm<4, 3, 1, 8, 500>::MSE);
+    //std::cout << GeneticAlgorithm<4, 3, 1, 8, 100>::ACTIVATE_ROUND(*bestnet->process<3, 1>(Input));
     
-    std::array<Matrix <float, 2, 1>, 4> inputs = {{ {{ {1,0} }}, {{ {0,0} }}, {{ {0,1} }}, {{ {1,1} }} }};
+    for (std::size_t inputid(0); inputid<8; inputid++){
+        std::cout << "Testing with " << std::endl;
+        std::cout << inputs[inputid];
+        std::cout << "Output :" << std::endl;
+        std::cout << *bestnet->process<3, 1>(inputs[inputid]);
+        std::cout << "Output expected :" << std::endl;
+        std::cout << outputs[inputid];
+    }
+    
+    // XOR DIM2
+    
+    /*std::array<Matrix <float, 2, 1>, 4> inputs = {{ {{ {1,0} }}, {{ {0,0} }}, {{ {0,1} }}, {{ {1,1} }} }};
     
     std::array<Matrix <float, 1, 1>, 4> outputs = {{ {{ {1} }}, {{ {0} }}, {{ {0} }}, {{ {1} }} }};
     
@@ -223,12 +235,12 @@ int main(int argc, const char * argv[]) {
             std::cout << *((Matrix<float, 1, 2>*)net2_layer3->getActivationLayer());
     };
     
-    GeneticAlgorithm<3, 2, 1, 4, 100> ga (inputs, outputs, init_instructions);
+    //GeneticAlgorithm<3, 2, 1, 4, 100> ga (inputs, outputs, init_instructions);
     //ga.setDebugFunction(debugfunc);
     
     //ga.setPostActivationProcess(GeneticAlgorithm<3, 2, 1, 4, 100>::ACTIVATE_ROUND);
-    /*NeuralNetwork<3>* bestnet = ga.trainNetworks(500, merging_instructions,
-                                                 GeneticAlgorithm<3, 2, 1, 4, 100>::ERRORS_COUNT);*/
+    NeuralNetwork<3>* bestnet = ga.trainNetworks(500, merging_instructions,
+                                                 GeneticAlgorithm<3, 2, 1, 4, 100>::ERRORS_COUNT);
     NeuralNetwork<3>* bestnet = ga.trainNetworks(500, merging_instructions,
                                                  GeneticAlgorithm<3, 2, 1, 4, 100>::MSE);
     
@@ -241,7 +253,7 @@ int main(int argc, const char * argv[]) {
         std::cout << "Output expected :" << std::endl;
         std::cout << outputs[inputid];
     }
-    
+    */
     //std::cout << "Debugging NN" << std::endl;
     //debugfunc(bestnet, nullptr);
     

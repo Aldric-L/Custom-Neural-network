@@ -62,23 +62,23 @@ public:
         if (!isFirstRow)
             throw std::exception();
         
-        
-        Matrix<float, NEURON_NUMBER, 1>* layer(0);
-        layer = (Matrix<float, NEURON_NUMBER, 1>*)arg;
-        ownActivationLayer = *layer;
-        previousActivationLayer = new Matrix<float, PREVIOUS_NEURON_NUMBER, 1>;
-        previousActivationLayer->operator()(1,1) = 1;
+        ownActivationLayer = *((Matrix<float, NEURON_NUMBER, 1>*)arg);
+        if (previousActivationLayer == nullptr)
+            delete previousActivationLayer;
+        // This is oddly a memory leak... but thanksfully it is not necessary to define previous activation Layer for the first layer
+        // It was only more "humanly-coherent"
+        //previousActivationLayer = new Matrix<float, PREVIOUS_NEURON_NUMBER, 1>;
+        //previousActivationLayer->operator()(1,1) = 1;
     }
     
     inline void setBiases(MatrixPrototype<float>* arg) {
-        Matrix<float, NEURON_NUMBER, 1>* new_biases(0);
-        new_biases = (Matrix<float, NEURON_NUMBER, 1>*)arg;
-        biases = *new_biases;
+        biases = *((Matrix<float, NEURON_NUMBER, 1>*)arg);
     }
     
     inline Matrix<float, NEURON_NUMBER, 1>* getBiasesAccess(){
         Matrix<float, NEURON_NUMBER, 1>* b_point (&biases);
-        return b_point;    }
+        return b_point;
+    }
     
     inline void setWeights(MatrixPrototype<float>* arg) {
         Matrix<float, NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>* new_weights(0);
@@ -125,12 +125,6 @@ public:
             //std::cout << "First row, use :" << std::endl;
             //std::cout << ownActivationLayer;
         }
-        return &ownActivationLayer;
-        //if (ownActivationLayer == Matrix<float, NEURON_NUMBER, 1>::EMPTY){
-            
-        //}
-        //std::cout << "Preexisting matrix ?" << std::endl;
-        //std::cout << ownActivationLayer;
         return &ownActivationLayer;
     }
     

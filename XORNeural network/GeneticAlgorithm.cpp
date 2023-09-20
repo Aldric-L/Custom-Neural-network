@@ -35,8 +35,8 @@ std::function<float(std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH>
     return errors;
 };
 
-template <size_t NBLAYERS, size_t INPUTNUMBER, size_t OUTPUTNUMBER, size_t TRAINING_LENGTH, size_t POP_SIZE>
-std::function<Matrix <float, OUTPUTNUMBER, 1>(Matrix <float, OUTPUTNUMBER, 1>)> GeneticAlgorithm<NBLAYERS, INPUTNUMBER, OUTPUTNUMBER, TRAINING_LENGTH, POP_SIZE>::ACTIVATE_ROUND = [](Matrix <float, OUTPUTNUMBER, 1> row_output) {
+template <size_t NBLAYERS, size_t INPUTNUMBER, size_t OUTPUTNUMBER, size_t POP_SIZE>
+std::function<Matrix <float, OUTPUTNUMBER, 1>(Matrix <float, OUTPUTNUMBER, 1>)> BaseGeneticAlgorithm<NBLAYERS, INPUTNUMBER, OUTPUTNUMBER, POP_SIZE>::ACTIVATE_ROUND = [](Matrix <float, OUTPUTNUMBER, 1> row_output) {
     for (std::size_t outputIncr(1); outputIncr <= OUTPUTNUMBER; outputIncr++){
         row_output(outputIncr, 1) = std::roundf(row_output(outputIncr, 1));
     }
