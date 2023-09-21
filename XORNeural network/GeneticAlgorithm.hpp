@@ -21,6 +21,8 @@
 #include "NeuralLayer.hpp"
 #include "Matrix.hpp"
 
+namespace akml {
+
 class GeneticAlgorithmMethods {
 public:
     template <typename NEURAL_NET_TYPE, typename NEURAL_LAYER_TYPE>
@@ -44,14 +46,9 @@ public:
                 child_layer->getBiasesAccess()->operator()(row+1, 1) = parent1_layer->getBiasesAccess()->operator()(row+1, 1);
             else
                 child_layer->getBiasesAccess()->operator()(row+1, 1) = parent2_layer->getBiasesAccess()->operator()(row+1, 1);
-            /*child_layer->getBiasesAccess()->operator()(row+1, 1) = (parent1_layer->getBiasesAccess()->operator()(row+1, 1)+parent2_layer->getBiasesAccess()->operator()(row+1, 1))/2;*/
             child_layer->getBiasesAccess()->operator()(row+1, 1) = child_layer->getBiasesAccess()->operator()(row+1, 1) * (1+distribution(gen));
-
+            
         }
-        /*if (parent2_layer != parent1_layer){
-            std::cout << "For instance, we had randomly in biases : " << std::endl;
-            std::cout << *(child_layer->getBiasesAccess());
-        }*/
         
         // weights :
         for (std::size_t row(0); row < child_layer->getNeuronNumber(); row++){
@@ -61,24 +58,13 @@ public:
                 else
                     child_layer->getWeightsAccess()->operator()(row+1, col+1) = parent2_layer->getWeightsAccess()->operator()(row+1, col+1);
                 
-                    /*child_layer->getWeightsAccess()->operator()(row+1, col+1) = (parent1_layer->getWeightsAccess()->operator()(row+1, col+1) + parent2_layer->getWeightsAccess()->operator()(row+1, col+1))/2;*/
-                
-                    child_layer->getWeightsAccess()->operator()(row+1, col+1) = child_layer->getWeightsAccess()->operator()(row+1, col+1) * (1+distribution(gen));
+                child_layer->getWeightsAccess()->operator()(row+1, col+1) = child_layer->getWeightsAccess()->operator()(row+1, col+1) * (1+distribution(gen));
             }
         }
-        /*if (parent2_layer != parent1_layer){
-            std::cout << "Parent 1: " << std::endl;
-            std::cout << *(parent1_layer->getBiasesAccess());
-            std::cout << "Parent 2: " << std::endl;
-            std::cout << *(parent2_layer->getBiasesAccess());
-            std::cout << "Final : " << std::endl;
-            std::cout << *(child_layer->getBiasesAccess());
-            
-        }*/
     }
 };
 
-template <size_t NBLAYERS, size_t INPUTNUMBER, size_t OUTPUTNUMBER, size_t POP_SIZE=20>
+template <size_t NBLAYERS, size_t INPUTNUMBER, size_t OUTPUTNUMBER, size_t POP_SIZE=50>
 class BaseGeneticAlgorithm : public GeneticAlgorithmMethods {
 protected:
     std::function<void(NeuralNetwork<NBLAYERS>&)> NNInstructions;
@@ -88,7 +74,7 @@ protected:
     
 public:
     static std::function<Matrix <float, OUTPUTNUMBER, 1>(Matrix <float, OUTPUTNUMBER, 1>)> ACTIVATE_ROUND;
-
+    
     inline BaseGeneticAlgorithm(const std::function<void(NeuralNetwork<NBLAYERS>&)> instructions) : NNInstructions(instructions){
         for (std::size_t i(0); i < POP_SIZE; i++){
             networksPopulation[i] = new NeuralNetwork<NBLAYERS> (std::string("RANDOM_INIT"));
@@ -115,6 +101,19 @@ public:
         return networksPopulation;
     }
     
+    inline std::array< Matrix <float, OUTPUTNUMBER, 1>, POP_SIZE> evaluateNN(Matrix <float, INPUTNUMBER, 1>& input){
+        std::array< Matrix <float, OUTPUTNUMBER, 1>, POP_SIZE> localoutputs;
+        for (std::size_t netid(0); netid < POP_SIZE; netid++){
+            localoutputs[netid] = *(networksPopulation[netid]->template process<INPUTNUMBER, OUTPUTNUMBER>(input));
+            if (this->postactivation_process != nullptr)
+                localoutputs[netid] = postactivation_process->operator()(localoutputs[netid]);
+        }
+        return localoutputs;
+    };
+    
+    /*
+     MSE should be sorted from worst to best.
+     */
     inline void generateNewGeneration(const std::array< std::pair<float, NeuralNetwork<NBLAYERS>*>, POP_SIZE>& MSE, std::size_t iteration,
                                       const std::function<void(NeuralNetwork<NBLAYERS>&, NeuralNetwork<NBLAYERS>*, NeuralNetwork<NBLAYERS>*)> merging_instructions) {
         std::array<NeuralNetwork<NBLAYERS>*, POP_SIZE> newNetworksPopulation;
@@ -138,7 +137,7 @@ public:
             NNInstructions(*newNetworksPopulation[i]);
             merging_instructions(*newNetworksPopulation[i], MSE[i].second, MSE[i].second);
             mean_MSE += MSE[i].first;
-                
+            
             if (debug_printer != nullptr)
                 debug_printer->operator()(MSE[i].second, newNetworksPopulation[i]);
         }
@@ -151,12 +150,12 @@ public:
     }
 };
 
-template <size_t NBLAYERS, size_t INPUTNUMBER, size_t OUTPUTNUMBER, size_t POP_SIZE=20>
+template <size_t NBLAYERS, size_t INPUTNUMBER, size_t OUTPUTNUMBER, size_t POP_SIZE=50>
 class ManualGeneticAlgorithm : public BaseGeneticAlgorithm<NBLAYERS, INPUTNUMBER, POP_SIZE>{
     
 };
 
-template <size_t NBLAYERS, size_t INPUTNUMBER, size_t OUTPUTNUMBER, size_t TRAINING_LENGTH, size_t POP_SIZE=20>
+template <size_t NBLAYERS, size_t INPUTNUMBER, size_t OUTPUTNUMBER, size_t TRAINING_LENGTH, size_t POP_SIZE=50>
 class GeneticAlgorithm : public BaseGeneticAlgorithm<NBLAYERS, INPUTNUMBER, OUTPUTNUMBER, POP_SIZE> {
 protected:
     std::array<Matrix <float, INPUTNUMBER, 1>, TRAINING_LENGTH> inputs;
@@ -171,7 +170,6 @@ public:
     inline GeneticAlgorithm(const std::array<Matrix <float, INPUTNUMBER, 1>, TRAINING_LENGTH> in, const std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH> out, const std::function<void(NeuralNetwork<NBLAYERS>&)> instructions) : BaseGeneticAlgorithm<NBLAYERS, INPUTNUMBER, OUTPUTNUMBER, POP_SIZE>(instructions), inputs(in), outputs(out) {
     };
     
-    
     /*
      Choices about generation of new population :
      Flop 1/12 is replaced by new networks generated randomly (introduction of immigration)
@@ -180,8 +178,8 @@ public:
      */
     
     inline NeuralNetwork<NBLAYERS>* trainNetworks(const int iterations,
-        const std::function<void(NeuralNetwork<NBLAYERS>&, NeuralNetwork<NBLAYERS>*, NeuralNetwork<NBLAYERS>*)> merging_instructions,
-        const std::function<float(std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH>, std::array< Matrix <float, OUTPUTNUMBER, 1> , TRAINING_LENGTH>)> evalfunc = GeneticAlgorithm<NBLAYERS, INPUTNUMBER, OUTPUTNUMBER, TRAINING_LENGTH, POP_SIZE>::MSE) {
+                                                  const std::function<void(NeuralNetwork<NBLAYERS>&, NeuralNetwork<NBLAYERS>*, NeuralNetwork<NBLAYERS>*)> merging_instructions,
+                                                  const std::function<float(std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH>, std::array< Matrix <float, OUTPUTNUMBER, 1> , TRAINING_LENGTH>)> evalfunc = GeneticAlgorithm<NBLAYERS, INPUTNUMBER, OUTPUTNUMBER, TRAINING_LENGTH, POP_SIZE>::MSE) {
         for (std::size_t iteration(1); iteration <= iterations; iteration++){
             std::array< std::array< Matrix <float, OUTPUTNUMBER, 1> , TRAINING_LENGTH>, POP_SIZE> localoutputs;
             std::array< std::pair<float, NeuralNetwork<NBLAYERS>*>, POP_SIZE> MSE;
@@ -196,13 +194,15 @@ public:
                 MSE[netid] = {MSE_i, this->networksPopulation[netid]};
             }
             std::sort(MSE.begin(), MSE.end(), [](const std::pair<float, NeuralNetwork<NBLAYERS>*> &x, const std::pair<float, NeuralNetwork<NBLAYERS>*> &y){
-                 return x.first > y.first;
-             });
+                return x.first > y.first;
+            });
             
             this->generateNewGeneration(MSE, iteration, merging_instructions);
             
-            if (MSE[POP_SIZE-1].first == 0)
+            if (MSE[POP_SIZE-1].first == 0.f){
+                std::cout << "Best NN trained in " << iteration << " iterations (max allowed: " << iterations << ")\n";
                 break;
+            }
         }
         
         return this->networksPopulation[POP_SIZE-1];
@@ -211,5 +211,6 @@ public:
     
 };
 
+}
 
 #endif /* GeneticAlgorithm_hpp */

@@ -7,6 +7,7 @@
 
 #include "GeneticAlgorithm.hpp"
 
+namespace akml {
 
 template <size_t NBLAYERS, size_t INPUTNUMBER, size_t OUTPUTNUMBER, size_t TRAINING_LENGTH, size_t POP_SIZE>
 std::function<float(std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH>, std::array< Matrix <float, OUTPUTNUMBER, 1> , TRAINING_LENGTH>)> GeneticAlgorithm<NBLAYERS, INPUTNUMBER, OUTPUTNUMBER, TRAINING_LENGTH, POP_SIZE>::MSE = [] (std::array<Matrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH> training_set, std::array< Matrix <float, OUTPUTNUMBER, 1> , TRAINING_LENGTH> real_outputs) {
@@ -43,3 +44,4 @@ std::function<Matrix <float, OUTPUTNUMBER, 1>(Matrix <float, OUTPUTNUMBER, 1>)> 
     return row_output;
 };
 
+}

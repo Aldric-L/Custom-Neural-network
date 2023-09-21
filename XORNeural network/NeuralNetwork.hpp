@@ -17,9 +17,11 @@
 #include "NeuralLayer.hpp"
 #include "Matrix.hpp"
 
+namespace akml {
+
 template <const std::size_t NBLAYERS>
 class NeuralNetwork {
-
+    
     
 public:
     const std::string customOriginField;
@@ -59,7 +61,7 @@ public:
                     layer = i + 1;
             }
         }
-
+        
         layers[layer-1] = new NeuralLayer<NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>(layer-1);
         layers[layer-1]->setActivationFunction(activation_function);
         
@@ -88,5 +90,7 @@ public:
         return  (Matrix<float, OUTPUTNUMBER, 1>*)layers[NBLAYERS-1]->getActivationLayer();
     }
 };
+
+}
 
 #endif /* NeuralNetwork_hpp */

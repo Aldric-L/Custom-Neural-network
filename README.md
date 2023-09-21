@@ -11,4 +11,4 @@ The main project is written in C++ with the standard library and without any dyn
 
 ## Stage of development 
 
-For now, the main core of the project is being written. A documentation and a refactoring (with namespaces for instance) is planned. 
+For now, the main core of the project is being written. Genetic algorithm is implemented and fully operationnal. A gradient descent is planned.

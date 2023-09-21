@@ -16,11 +16,13 @@
 #include <cmath>
 #include <random>
 
+namespace akml {
+
 template <typename element_type>
 class MatrixPrototype {
 public:
     const std::size_t rows, columns;
-
+    
     inline MatrixPrototype(const std::size_t rows, const std::size_t columns) : columns(columns), rows(rows) {};
     
     inline element_type read(const size_t row, const size_t column) const
@@ -49,7 +51,7 @@ public:
     
     inline Matrix(const bool fromscratch=false) : MatrixPrototype<element_type>(ROWS, COLUMNS) {
         (!fromscratch) ? m_data = Matrix<element_type, ROWS, COLUMNS>::EMPTY.m_data : Matrix<element_type, ROWS, COLUMNS>::create(this); }
-
+    
     inline element_type& operator()(size_t row, size_t column)
     {
         return m_data[row-1][column-1];
@@ -93,14 +95,14 @@ public:
     }
     
     /*inline static Matrix<element_type, ROWS, COLUMNS>& create(){
-        Matrix<element_type, ROWS, COLUMNS> matrix;
-        for (std::size_t i=0; i <= ROWS; i++){
-            for (std::size_t j=0; j <= COLUMNS; j++){
-                matrix.m_data[0][0] = 0;
-            }
-        }
-        return matrix;
-    }*/
+     Matrix<element_type, ROWS, COLUMNS> matrix;
+     for (std::size_t i=0; i <= ROWS; i++){
+     for (std::size_t j=0; j <= COLUMNS; j++){
+     matrix.m_data[0][0] = 0;
+     }
+     }
+     return matrix;
+     }*/
     
     inline static Matrix<element_type, ROWS, COLUMNS>& create(Matrix<element_type, ROWS, COLUMNS>* matrix){
         for (std::size_t i=0; i <= ROWS; i++){
@@ -112,7 +114,7 @@ public:
     }
     
     inline Matrix(std::array <std::array <element_type, COLUMNS>, ROWS> data) : MatrixPrototype<element_type>(ROWS, COLUMNS) { m_data = data; }
-
+    
     inline Matrix<element_type, ROWS, COLUMNS>& operator+=(const Matrix<element_type, ROWS, COLUMNS>& mat){
         for (std::size_t i=1; i <= ROWS; i++){
             for (std::size_t j=1; j <= COLUMNS; j++){
@@ -189,7 +191,7 @@ public:
         }
         return matrix;
     }
-
+    
     inline static void cout(Matrix<element_type, ROWS, COLUMNS> matrix){
         //std::cout << "Printing Matrix <" << matrix.rows << " " << matrix.columns << ">" << std::endl;
         std::cout << "[";
@@ -210,5 +212,7 @@ public:
         std::cout << "]" << std::endl;
     }
 };
+
+}
 
 #endif /* Matrix_hpp */

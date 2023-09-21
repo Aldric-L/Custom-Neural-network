@@ -7,6 +7,7 @@
 
 #include "Matrix.hpp"
 
+namespace akml {
 
 template <typename element_type, std::size_t ROWS, std::size_t COLUMNS>
 std::function<element_type(element_type, std::size_t, std::size_t)> Matrix<element_type, ROWS, COLUMNS>::NO_ACTION_TRANSFORM = [](element_type x, std::size_t row, std::size_t column) {return x;};
@@ -24,3 +25,5 @@ Matrix<element_type, ROWS, COLUMNS> Matrix<element_type, ROWS, COLUMNS>::EMPTY (
 
 template <typename element_type, std::size_t ROWS, std::size_t COLUMNS>
 Matrix<element_type, ROWS, COLUMNS> Matrix<element_type, ROWS, COLUMNS>::IDENTITY = Matrix<element_type, ROWS, COLUMNS>::transform(Matrix<element_type, ROWS, COLUMNS>::EMPTY, Matrix<element_type, ROWS, COLUMNS>::IDENTITY_TRANSFORM);
+
+}

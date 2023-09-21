@@ -13,6 +13,8 @@
 #include <exception>
 #include "Matrix.hpp"
 
+namespace akml {
+
 class AbstractNeuralLayer {
 protected:
     std::function<float(float)> activationFunction;
@@ -96,38 +98,22 @@ public:
     }
     
     inline void setPreviousActivationLayer(MatrixPrototype<float>* arg) {
-        //std::cout << "Prev activ layer received : " << std::endl;
         Matrix<float, PREVIOUS_NEURON_NUMBER, 1>* prev(0);
         prev = (Matrix<float, PREVIOUS_NEURON_NUMBER, 1>*)arg;
         previousActivationLayer = prev;
-        //std::cout << *previousActivationLayer;
     }
     
     inline MatrixPrototype<float>* getActivationLayer(){
-        //std::cout << "-------- Process layer " << layerId << " - NNumber=" << NEURON_NUMBER <<  std::endl;
         if (!isFirstRow){
-            /*std::cout << "Use Previous layer : " << std::endl;
-            std::cout << *previousActivationLayer;
-            std::cout << "Use weights : " << std::endl;
-            std::cout << weights;
-            std::cout << "Use biases : " << std::endl;
-            std::cout << biases;*/
             ownActivationLayer = Matrix<float, NEURON_NUMBER, 1>::product(weights, *previousActivationLayer);
-            /*std::cout << "Product : " << std::endl;
-            std::cout << ownActivationLayer;*/
             ownActivationLayer += biases;
-            /*std::cout << "Plus biases : " << std::endl;
-            std::cout << ownActivationLayer;*/
             ownActivationLayer.transform(activationFunction);
-            /*std::cout << "Final : " << std::endl;
-            std::cout << ownActivationLayer;*/
-        }else {
-            //std::cout << "First row, use :" << std::endl;
-            //std::cout << ownActivationLayer;
         }
         return &ownActivationLayer;
     }
     
 };
+
+}
 
 #endif /* NeuralLayer_hpp */
