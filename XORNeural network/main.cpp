@@ -16,98 +16,81 @@
 //                !qv              !qv   `}czjf:                    wLwJCqzCxYwLwJCddddfd
 //
 
-#include <iostream>
-#include <functional>
-#include <cmath>
+// This file provides an example of the usage of AKML for simple problems like the famous XOR
+#define XOR_DIM 3
 
-#include "Matrix.cpp"
-#include "NeuralNetwork.cpp"
+// AKML needs to first have the default layout of NeuralNetworks defiened
+#if XOR_DIM == 3
+    #define AKML_NEURAL_LAYER_NB 4
+    #define AKML_NN_STRUCTURE { 3, 6, 3, 1 }
+#endif
+
+#if XOR_DIM == 2
+    #define AKML_NEURAL_LAYER_NB 3
+    #define AKML_NN_STRUCTURE { 2, 2, 1 }
+#endif
+
+// AKML.hpp contains the basics utilities needed to build a NeuralNetwork
+#include "AKML.hpp"
+// If you want to use a GA, you need to include it (it is not in the AKML.hpp)
 #include "GeneticAlgorithm.cpp"
 
- 
 int main(int argc, const char * argv[]) {
     std::cout << "Hello, terrible World!\n";
      
-    akml::NeuralNetwork<4> neuralnet;
+    // NeuralNetwork initialization example
+    akml::NeuralNetwork neuralnet;
+    /*
+    Manual initialization example :
     neuralnet.setFirstLayer<3>();
     neuralnet.setLayer<6, 3>(2);
     neuralnet.setLayer<3, 6>(3);
-    neuralnet.setLayer<1, 3>(4);
+    neuralnet.setLayer<1, 3>(4);*/
+    akml::NeuralNetwork<>::DEFAULT_INIT_INSTRUCTIONS(neuralnet);
     
-    //XOR with dim3
-    std::array<akml::Matrix <float, 3, 1>, 8> inputs =
-    {{ {{ {1,0,0} }}, {{ {0,0,1} }}, {{ {0,1,0} }},
-       {{ {1,1,0} }}, {{ {1,0,1} }}, {{ {1,1,0} }},
-       {{ {0,0,0} }}, {{ {1,1,1} }} }};
     
-    std::array<akml::Matrix <float, 1, 1>, 8> outputs =
-    {{ {{ {1} }}, {{ {1} }}, {{ {1} }},
-       {{ {0} }}, {{ {0} }}, {{ {0} }},
-       {{ {0} }}, {{ {0} }} }};
-    
-    std::function<void(akml::NeuralNetwork<4>&)> init_instructions = [](akml::NeuralNetwork<4>& net) {
-        net.setFirstLayer<3>();
-        net.setLayer<6, 3>(2);
-        net.setLayer<3, 6>(3);
-        net.setLayer<1, 3>(4);
-    };
-    
-    std::function<void(akml::NeuralNetwork<4>&, akml::NeuralNetwork<4>*, akml::NeuralNetwork<4>*)> merging_instructions =
-    [](akml::NeuralNetwork<4>& child, akml::NeuralNetwork<4>* parent1, akml::NeuralNetwork<4>* parent2) {
-        if (parent1 == parent2)
-            akml::GeneticAlgorithmMethods::mergeLayers<akml::NeuralNetwork<4>, akml::NeuralLayer<3, 1>>(1, parent1, parent2, child);
-        akml::GeneticAlgorithmMethods::mergeLayers<akml::NeuralNetwork<4>, akml::NeuralLayer<6, 3>>(2, parent1, parent2, child);
-        akml::GeneticAlgorithmMethods::mergeLayers<akml::NeuralNetwork<4>, akml::NeuralLayer<3, 6>>(3, parent1, parent2, child);
-        akml::GeneticAlgorithmMethods::mergeLayers<akml::NeuralNetwork<4>, akml::NeuralLayer<1, 3>>(4, parent1, parent2, child);
-    };
-    
-    akml::GeneticAlgorithm<4, 3, 1, 8> ga (inputs, outputs, init_instructions);
-    akml::NeuralNetwork<4>* bestnet = ga.trainNetworks(5000, merging_instructions,
-                                                 akml::GeneticAlgorithm<4, 3, 1, 8>::MSE);
+    #if XOR_DIM == 3
+        std::array<akml::Matrix <float, 3, 1>, 8> inputs =
+        {{ {{ {1,0,0} }}, {{ {0,0,1} }}, {{ {0,1,0} }},
+           {{ {1,1,0} }}, {{ {1,0,1} }}, {{ {1,1,0} }},
+           {{ {0,0,0} }}, {{ {1,1,1} }} }};
         
-    for (std::size_t inputid(0); inputid<8; inputid++){
-        std::cout << "Testing with " << std::endl;
-        std::cout << inputs[inputid];
-        std::cout << "Output :" << std::endl;
-        std::cout << *bestnet->process<3, 1>(inputs[inputid]);
-        std::cout << "Output expected :" << std::endl;
-        std::cout << outputs[inputid];
-    }
-    
-    // XOR DIM2
-    /*
-    std::array<akml::Matrix <float, 2, 1>, 4> inputs = {{ {{ {1,0} }}, {{ {0,0} }}, {{ {0,1} }}, {{ {1,1} }} }};
-    
-    std::array<akml::Matrix <float, 1, 1>, 4> outputs = {{ {{ {1} }}, {{ {0} }}, {{ {0} }}, {{ {1} }} }};
-    
-    std::function<void(akml::NeuralNetwork<3>&)> init_instructions = [](akml::NeuralNetwork<3>& net) {
-        net.setFirstLayer<2>();
-        net.setLayer<2, 2>(2);
-        net.setLayer<1, 2>(3);
-    };
-    
-    std::function<void(akml::NeuralNetwork<3>&, akml::NeuralNetwork<3>*, akml::NeuralNetwork<3>*)> merging_instructions =
-    [](akml::NeuralNetwork<3>& child, akml::NeuralNetwork<3>* parent1, akml::NeuralNetwork<3>* parent2) {
-        if (parent1 == parent2)
-            akml::GeneticAlgorithmMethods::mergeLayers<akml::NeuralNetwork<3>, akml::NeuralLayer<2, 1>>(1, parent1, parent2, child);
+        std::array<akml::Matrix <float, 1, 1>, 8> outputs =
+        {{ {{ {1} }}, {{ {1} }}, {{ {1} }},
+           {{ {0} }}, {{ {0} }}, {{ {0} }},
+           {{ {0} }}, {{ {0} }} }};
+        
 
-        akml::GeneticAlgorithmMethods::mergeLayers<akml::NeuralNetwork<3>, akml::NeuralLayer<2, 2>>(2, parent1, parent2, child);
-        akml::GeneticAlgorithmMethods::mergeLayers<akml::NeuralNetwork<3>, akml::NeuralLayer<1, 2>>(3, parent1, parent2, child);
-    };
+        akml::GeneticAlgorithm<4, 3, 1, 8> ga (inputs, outputs);
+        akml::NeuralNetwork<4>* bestnet = ga.trainNetworks(5000);
+            
+        for (std::size_t inputid(0); inputid<8; inputid++){
+            std::cout << "Testing with " << std::endl;
+            std::cout << inputs[inputid];
+            std::cout << "Output :" << std::endl;
+            std::cout << *bestnet->process<3, 1>(inputs[inputid]);
+            std::cout << "Output expected :" << std::endl;
+            std::cout << outputs[inputid];
+        }
+    #endif
     
-    
-    akml::GeneticAlgorithm<3, 2, 1, 4, 100> ga (inputs, outputs, init_instructions);
-    akml::NeuralNetwork<3>* bestnet = ga.trainNetworks(500, merging_instructions,
-                                                       akml::GeneticAlgorithm<3, 2, 1, 4, 100>::MSE);
-    
-    for (std::size_t inputid(0); inputid<4; inputid++){
-        std::cout << "Testing with " << std::endl;
-        std::cout << inputs[inputid];
-        std::cout << "Output :" << std::endl;
-        std::cout << *bestnet->process<2, 1>(inputs[inputid]);
-        std::cout << "Output expected :" << std::endl;
-        std::cout << outputs[inputid];
-    }*/
+    #if XOR_DIM == 2
+        std::array<akml::Matrix <float, 2, 1>, 4> inputs = {{ {{ {1,0} }}, {{ {0,0} }}, {{ {0,1} }}, {{ {1,1} }} }};
+        
+        std::array<akml::Matrix <float, 1, 1>, 4> outputs = {{ {{ {1} }}, {{ {0} }}, {{ {0} }}, {{ {1} }} }};
+        
+        akml::GeneticAlgorithm<3, 2, 1, 4, 100> ga (inputs, outputs);
+        akml::NeuralNetwork<>* bestnet = ga.trainNetworks(500);
+        
+        for (std::size_t inputid(0); inputid<4; inputid++){
+            std::cout << "Testing with " << std::endl;
+            std::cout << inputs[inputid];
+            std::cout << "Output :" << std::endl;
+            std::cout << *bestnet->process<2, 1>(inputs[inputid]);
+            std::cout << "Output expected :" << std::endl;
+            std::cout << outputs[inputid];
+        }
+    #endif
     
     return 0;
 }

@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		FE2F08D82AB1A1100029A57D /* GeneticAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE2F08D62AB1A1100029A57D /* GeneticAlgorithm.cpp */; };
 		FE7CACBB2AA9FB68002EEBD1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE7CACBA2AA9FB68002EEBD1 /* main.cpp */; };
-		FEF384302AAA37C80094AA50 /* NeuralNetwork.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FEF3842E2AAA37C80094AA50 /* NeuralNetwork.cpp */; };
-		FEF384332AAB7C5E0094AA50 /* Matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FEF384312AAB7C5E0094AA50 /* Matrix.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,9 +29,10 @@
 		FE7CACB72AA9FB68002EEBD1 /* XORNeural network */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "XORNeural network"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE7CACBA2AA9FB68002EEBD1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		FE98292D2AB334C900E5B7ED /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		FEF3842E2AAA37C80094AA50 /* NeuralNetwork.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NeuralNetwork.cpp; sourceTree = "<group>"; };
-		FEF3842F2AAA37C80094AA50 /* NeuralNetwork.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NeuralNetwork.hpp; sourceTree = "<group>"; };
-		FEF384312AAB7C5E0094AA50 /* Matrix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Matrix.cpp; sourceTree = "<group>"; };
+		FED103262ADAD74100DFA915 /* AKML.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AKML.hpp; sourceTree = "<group>"; };
+		FED103272ADAFD0800DFA915 /* UtilityLoops.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UtilityLoops.hpp; sourceTree = "<group>"; };
+		FEE4F7362ADBE12100E27D68 /* AKML_consts.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AKML_consts.hpp; sourceTree = "<group>"; };
+		FEE4F7382ADC052700E27D68 /* NeuralNetwork.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NeuralNetwork.hpp; sourceTree = "<group>"; };
 		FEF384322AAB7C5E0094AA50 /* Matrix.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Matrix.hpp; sourceTree = "<group>"; };
 		FEF384382AACD8F10094AA50 /* NeuralLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NeuralLayer.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -70,13 +69,14 @@
 			isa = PBXGroup;
 			children = (
 				FE7CACBA2AA9FB68002EEBD1 /* main.cpp */,
-				FEF3842E2AAA37C80094AA50 /* NeuralNetwork.cpp */,
-				FEF3842F2AAA37C80094AA50 /* NeuralNetwork.hpp */,
-				FEF384312AAB7C5E0094AA50 /* Matrix.cpp */,
 				FEF384322AAB7C5E0094AA50 /* Matrix.hpp */,
 				FEF384382AACD8F10094AA50 /* NeuralLayer.hpp */,
 				FE2F08D62AB1A1100029A57D /* GeneticAlgorithm.cpp */,
 				FE2F08D72AB1A1100029A57D /* GeneticAlgorithm.hpp */,
+				FED103262ADAD74100DFA915 /* AKML.hpp */,
+				FED103272ADAFD0800DFA915 /* UtilityLoops.hpp */,
+				FEE4F7382ADC052700E27D68 /* NeuralNetwork.hpp */,
+				FEE4F7362ADBE12100E27D68 /* AKML_consts.hpp */,
 			);
 			path = "XORNeural network";
 			sourceTree = "<group>";
@@ -108,7 +108,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastUpgradeCheck = 1430;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					FE7CACB62AA9FB68002EEBD1 = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -139,9 +139,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FE2F08D82AB1A1100029A57D /* GeneticAlgorithm.cpp in Sources */,
-				FEF384332AAB7C5E0094AA50 /* Matrix.cpp in Sources */,
 				FE7CACBB2AA9FB68002EEBD1 /* main.cpp in Sources */,
-				FEF384302AAA37C80094AA50 /* NeuralNetwork.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,9 +179,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -239,9 +239,11 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -261,6 +263,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -269,6 +272,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				DEAD_CODE_STRIPPING = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

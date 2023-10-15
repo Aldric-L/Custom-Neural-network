@@ -8,14 +8,6 @@
 #ifndef Matrix_hpp
 #define Matrix_hpp
 
-#include <stdio.h>
-#include <stdexcept>
-#include <iostream>
-#include <array>
-#include <functional>
-#include <cmath>
-#include <random>
-
 namespace akml {
 
 template <typename element_type>
@@ -40,12 +32,21 @@ template <typename element_type, std::size_t ROWS, std::size_t COLUMNS>
 class Matrix : public MatrixPrototype<element_type>
 {
 public:
-    static std::function<element_type(element_type, std::size_t, std::size_t)> NO_ACTION_TRANSFORM;
+    /*static std::function<element_type(element_type, std::size_t, std::size_t)> NO_ACTION_TRANSFORM;
     static std::function<element_type(element_type, std::size_t, std::size_t)> IDENTITY_TRANSFORM;
-    static std::function<element_type(element_type, std::size_t, std::size_t)> RANDOM_TRANSFORM;
+    static std::function<element_type(element_type, std::size_t, std::size_t)> RANDOM_TRANSFORM;*/
     
-    static Matrix<element_type, ROWS, COLUMNS> IDENTITY;
-    static Matrix<element_type, ROWS, COLUMNS> EMPTY;
+    static inline std::function<element_type(element_type, std::size_t, std::size_t)> NO_ACTION_TRANSFORM = [](element_type x, std::size_t row, std::size_t column) {return x;};
+
+    static inline std::function<element_type(element_type, std::size_t, std::size_t)> IDENTITY_TRANSFORM = [](element_type x, std::size_t row, std::size_t column) { return ((column%2 != 0 && row%2 != 0) || (column%2 == 0 && row%2 == 0)) ? 1 : 0;};
+
+    static inline std::function<element_type(element_type, std::size_t, std::size_t)> RANDOM_TRANSFORM = [](element_type x, std::size_t row, std::size_t column) { std::random_device rd;  std::mt19937 gen(rd()); std::normal_distribution<double> distribution(0.0,3); return distribution(gen); };
+    
+    //static Matrix<element_type, ROWS, COLUMNS> IDENTITY;
+    static inline Matrix<element_type, ROWS, COLUMNS> IDENTITY = Matrix<element_type, ROWS, COLUMNS>::transform(Matrix<element_type, ROWS, COLUMNS>::EMPTY, Matrix<element_type, ROWS, COLUMNS>::IDENTITY_TRANSFORM);
+
+    //static Matrix<element_type, ROWS, COLUMNS> EMPTY;
+    static inline Matrix<element_type, ROWS, COLUMNS> EMPTY = Matrix<element_type, ROWS, COLUMNS> (true);
     
     std::array <std::array <element_type, COLUMNS>, ROWS> m_data;
     
