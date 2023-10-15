@@ -8,27 +8,33 @@
 #ifndef NeuralNetwork_hpp
 #define NeuralNetwork_hpp
 
-#include <stdio.h>
-#include <array>
-#include <string>
-#include <stdexcept>
-#include <functional>
-
-#include "NeuralLayer.hpp"
+#include "AKML_consts.hpp"
+#include "UtilityLoops.hpp"
 #include "Matrix.hpp"
+#include "NeuralLayer.hpp"
 
 namespace akml {
 
-template <const std::size_t NBLAYERS>
+template <const std::size_t NBLAYERS=AKML_NEURAL_LAYER_NB>
 class NeuralNetwork {
+protected:
+    const std::string customOriginField;
+    std::array<AbstractNeuralLayer*, NBLAYERS> layers;
     
+    template<int i, int j>
+    struct setLayer_functor {
+        static void run(akml::NeuralNetwork<NBLAYERS>& neuralnet, std::function<float(float)>& activation_func) {
+            //std::cout << "i=" << i << " j=" << j << std::endl;
+            neuralnet.setLayer<akml::NN_STRUCTURE[j], akml::NN_STRUCTURE[i]>(i+2, activation_func);
+        }
+    };
     
 public:
-    const std::string customOriginField;
-    static std::function<float(float)> SIGMOID;
-    static std::function<float(float)> NO_ACTION;
     
-    std::array<AbstractNeuralLayer*, NBLAYERS> layers;
+    static inline std::function<float(float)> SIGMOID = [](float x) {return 1/(1+exp(-x));};
+    static inline std::function<float(float)> RELU = [](float x) {return std::max(0.f, x); };
+
+    static inline std::function<float(float)> NO_ACTION = [](float x) {return x;};
     
     inline NeuralNetwork(std::string customOriginField="") : customOriginField(customOriginField) {
         for (std::size_t i(0); i < NBLAYERS; i++){
@@ -89,6 +95,26 @@ public:
         
         return  (Matrix<float, OUTPUTNUMBER, 1>*)layers[NBLAYERS-1]->getActivationLayer();
     }
+    
+    static inline std::function<void(akml::NeuralNetwork<NBLAYERS>&)> DEFAULT_INIT_INSTRUCTIONS = [](NeuralNetwork<NBLAYERS>& net) {
+        if (NBLAYERS != akml::NEURAL_LAYER_NB)
+            throw std::invalid_argument("You should not use a default initializer for a neural network which is not standard in layers number.");
+        
+        net.setFirstLayer<akml::NN_STRUCTURE[0]>();
+        akml::for_<0, NBLAYERS-1>::template run<setLayer_functor,akml::NeuralNetwork<NBLAYERS>&, std::function<float(float)>&>(net, akml::NeuralNetwork<NBLAYERS>::SIGMOID);
+    };
+    
+    static inline std::function<void(akml::NeuralNetwork<NBLAYERS>&)> DEFAULT_INITRELU_INSTRUCTIONS = [](NeuralNetwork<NBLAYERS>& net) {
+        if (NBLAYERS != akml::NEURAL_LAYER_NB)
+            throw std::invalid_argument("You should not use a default initializer for a neural network which is not standard in layers number.");
+        
+        net.setFirstLayer<akml::NN_STRUCTURE[0]>();
+        if (NBLAYERS < 3)
+            return akml::NeuralNetwork<NBLAYERS>::DEFAULT_INIT_INSTRUCTIONS;
+
+        akml::for_<0, NBLAYERS-2>::template run<setLayer_functor,akml::NeuralNetwork<NBLAYERS>&, std::function<float(float)>&>(net, akml::NeuralNetwork<NBLAYERS>::RELU);
+        akml::for_<NBLAYERS-2, NBLAYERS-1>::template run<setLayer_functor,akml::NeuralNetwork<NBLAYERS>&, std::function<float(float)>&>(net, akml::NeuralNetwork<NBLAYERS>::SIGMOID);
+    };
 };
 
 }
