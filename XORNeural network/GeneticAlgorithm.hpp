@@ -158,7 +158,7 @@ public:
         reproduction_rate = reproduction_r;
         newcomers_rate = newcomers_r;
         conservation_rate = 1 - newcomers_rate - reproduction_rate;
-        newcomers_bound = std::round(newcomers_rate * POP_SIZE);
+        newcomers_bound = std::max(std::round(newcomers_rate * POP_SIZE), (double)1);
         reproduction_bound = std::round((reproduction_rate + newcomers_rate) * POP_SIZE);
     }
     
