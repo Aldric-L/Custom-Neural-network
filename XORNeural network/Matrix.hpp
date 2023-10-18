@@ -1,6 +1,6 @@
 //
 //  Matrix.hpp
-//  XORNeural network
+//  AKML Project
 //
 //  Created by Aldric Labarthe on 08/09/2023.
 //

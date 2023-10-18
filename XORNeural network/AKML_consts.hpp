@@ -1,6 +1,6 @@
 //
 //  AKML_consts.hpp
-//  XORNeural network
+//  AKML Project
 //
 //  Created by Aldric Labarthe on 15/10/2023.
 //

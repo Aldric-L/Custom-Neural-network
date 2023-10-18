@@ -1,12 +1,12 @@
 //
 //  AKML.hpp
-//  XORNeural network
+//  AKML Project
 //
 //  Created by Aldric Labarthe on 14/10/2023.
 //
 
-#ifndef AKML_hpp
-#define AKML_hpp
+//#ifndef AKML_hpp
+//#define AKML_hpp
 
 #include <stdio.h>
 #include <string>
@@ -18,8 +18,10 @@
 #include <algorithm>
 #include <cmath>
 #include <random>
+#include <fstream>
+#include <iomanip>
 
-#endif /* AKML_hpp */
+//#endif /* AKML_hpp */
 
 #include "AKML_consts.hpp"
 #include "UtilityLoops.hpp"

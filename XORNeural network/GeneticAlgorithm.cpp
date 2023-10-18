@@ -1,6 +1,6 @@
 //
 //  GeneticAlgorithm.cpp
-//  XORNeural network
+//  AKML Project
 //
 //  Created by Aldric Labarthe on 13/09/2023.
 //

@@ -1,6 +1,6 @@
 //
 //  NeuralLayer.hpp
-//  XORNeural network
+//  AKML Project
 //
 //  Created by Aldric Labarthe on 09/09/2023.
 //
@@ -107,6 +107,25 @@ public:
             ownActivationLayer.transform(activationFunction);
         }
         return &ownActivationLayer;
+    }
+    
+    inline void saveLayer(std::string* buffer, int id){
+        *buffer += ("AKML_LAYER_BIASES " + std::to_string(id) + "\n");
+        // Biases :
+        for (std::size_t row(0); row < this->getNeuronNumber(); row++){
+            *buffer += std::to_string(this->getBiasesAccess()->operator()(row+1, 1)) + "\n";
+        }
+        
+        *buffer += "AKML_LAYER_END_BIASES \n";
+        *buffer += "AKML_LAYER_WEIGHTS " + std::to_string(id) + "\n";
+        // weights :
+        for (std::size_t row(0); row < this->getNeuronNumber(); row++){
+            for (std::size_t col(0); col < this->getPreviousNeuronNumber(); col++){
+                *buffer += std::to_string(this->getWeightsAccess()->operator()(row+1, col+1)) + " ";
+            }
+            *buffer += "\n";
+        }
+        *buffer += "AKML_LAYER_END_WEIGHTS \n";
     }
     
 };

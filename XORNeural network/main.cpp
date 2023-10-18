@@ -48,11 +48,10 @@ int main(int argc, const char * argv[]) {
     neuralnet.setLayer<1, 3>(4);*/
     akml::NeuralNetwork<>::DEFAULT_INIT_INSTRUCTIONS(neuralnet);
     
-    
     #if XOR_DIM == 3
         std::array<akml::Matrix <float, 3, 1>, 8> inputs =
         {{ {{ {1,0,0} }}, {{ {0,0,1} }}, {{ {0,1,0} }},
-           {{ {1,1,0} }}, {{ {1,0,1} }}, {{ {1,1,0} }},
+           {{ {1,1,0} }}, {{ {1,0,1} }}, {{ {0,1,1} }},
            {{ {0,0,0} }}, {{ {1,1,1} }} }};
         
         std::array<akml::Matrix <float, 1, 1>, 8> outputs =
@@ -62,35 +61,28 @@ int main(int argc, const char * argv[]) {
         
 
         akml::GeneticAlgorithm<4, 3, 1, 8> ga (inputs, outputs);
-        akml::NeuralNetwork<4>* bestnet = ga.trainNetworks(5000);
-            
-        for (std::size_t inputid(0); inputid<8; inputid++){
-            std::cout << "Testing with " << std::endl;
-            std::cout << inputs[inputid];
-            std::cout << "Output :" << std::endl;
-            std::cout << *bestnet->process<3, 1>(inputs[inputid]);
-            std::cout << "Output expected :" << std::endl;
-            std::cout << outputs[inputid];
-        }
     #endif
     
     #if XOR_DIM == 2
         std::array<akml::Matrix <float, 2, 1>, 4> inputs = {{ {{ {1,0} }}, {{ {0,0} }}, {{ {0,1} }}, {{ {1,1} }} }};
         
-        std::array<akml::Matrix <float, 1, 1>, 4> outputs = {{ {{ {1} }}, {{ {0} }}, {{ {0} }}, {{ {1} }} }};
+        std::array<akml::Matrix <float, 1, 1>, 4> outputs = {{ {{ {1} }}, {{ {0} }}, {{ {1} }}, {{ {0} }} }};
         
-        akml::GeneticAlgorithm<3, 2, 1, 4, 100> ga (inputs, outputs);
-        akml::NeuralNetwork<>* bestnet = ga.trainNetworks(500);
-        
-        for (std::size_t inputid(0); inputid<4; inputid++){
-            std::cout << "Testing with " << std::endl;
-            std::cout << inputs[inputid];
-            std::cout << "Output :" << std::endl;
-            std::cout << *bestnet->process<2, 1>(inputs[inputid]);
-            std::cout << "Output expected :" << std::endl;
-            std::cout << outputs[inputid];
-        }
+        akml::GeneticAlgorithm<3, 2, 1, 4> ga (inputs, outputs);
     #endif
+    
+    akml::NeuralNetwork<>* bestnet = ga.trainNetworks(5000);
+    
+    for (std::size_t inputid(0); inputid<inputs.size(); inputid++){
+        std::cout << "Testing with " << std::endl;
+        std::cout << inputs[inputid];
+        std::cout << "Output :" << std::endl;
+        std::cout << *bestnet->process<>(inputs[inputid]);
+        std::cout << "Output expected :" << std::endl;
+        std::cout << outputs[inputid];
+    }
+    neuralnet.saveNetwork("cout");
+    
     
     return 0;
 }

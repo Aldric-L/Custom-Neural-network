@@ -1,6 +1,6 @@
 //
 //  UtilityLoops.hpp
-//  XORNeural network
+//  AKML Project
 //
 //  Created by Aldric Labarthe on 14/10/2023.
 //
