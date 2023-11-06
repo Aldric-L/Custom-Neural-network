@@ -37,7 +37,7 @@
 
 int main(int argc, const char * argv[]) {
     std::cout << "Hello, terrible World!\n";
-     
+    
     // NeuralNetwork initialization example
     akml::NeuralNetwork neuralnet;
     /*
@@ -70,7 +70,6 @@ int main(int argc, const char * argv[]) {
         
         akml::GeneticAlgorithm<3, 2, 1, 4> ga (inputs, outputs);
     #endif
-    
     akml::NeuralNetwork<>* bestnet = ga.trainNetworks(5000);
     
     for (std::size_t inputid(0); inputid<inputs.size(); inputid++){
