@@ -17,10 +17,7 @@ public:
     
     inline MatrixPrototype(const std::size_t rows, const std::size_t columns) : columns(columns), rows(rows) {};
     
-    inline element_type read(const size_t row, const size_t column) const
-    {
-        return 0;
-    }
+    inline element_type read(const size_t row, const size_t column) const { return 0; }
     
     inline friend void operator<<(std::ostream& flux, MatrixPrototype<element_type> matrix){
         std::cout << "MatrixPrototype M(" << matrix.rows << ";" << matrix.columns << ")" << std::endl;
@@ -38,7 +35,8 @@ public:
     
     static inline std::function<element_type(element_type, std::size_t, std::size_t)> NO_ACTION_TRANSFORM = [](element_type x, std::size_t row, std::size_t column) {return x;};
 
-    static inline std::function<element_type(element_type, std::size_t, std::size_t)> IDENTITY_TRANSFORM = [](element_type x, std::size_t row, std::size_t column) { return ((column%2 != 0 && row%2 != 0) || (column%2 == 0 && row%2 == 0)) ? 1 : 0;};
+    /*static inline std::function<element_type(element_type, std::size_t, std::size_t)> IDENTITY_TRANSFORM = [](element_type x, std::size_t row, std::size_t column) { return ((column%2 != 0 && row%2 != 0) || (column%2 == 0 && row%2 == 0)) ? 1 : 0;};*/
+    static inline std::function<element_type(element_type, std::size_t, std::size_t)> IDENTITY_TRANSFORM = [](element_type x, std::size_t row, std::size_t column) { return (column == row) ? 1 : 0;};
 
     static inline std::function<element_type(element_type, std::size_t, std::size_t)> RANDOM_TRANSFORM = [](element_type x, std::size_t row, std::size_t column) { std::random_device rd;  std::mt19937 gen(rd()); std::normal_distribution<double> distribution(0.0,3); return distribution(gen); };
     
@@ -61,6 +59,11 @@ public:
     {
         return m_data[row-1][column-1];
     }
+    inline element_type read(const std::array<std::size_t, 2> row_and_col)
+    {
+        return m_data[row_and_col[0]-1][row_and_col[1]-1];
+    }
+    
     inline element_type& operator[](std::array<std::size_t, 2> row_and_col)
     {
         return m_data[row_and_col[0]][row_and_col[1]];
@@ -160,6 +163,18 @@ public:
                 }
                 product(i, j) = *temp;
                 delete temp;
+            }
+        }
+        
+        return product;
+        
+    };
+    
+    inline static Matrix<element_type, ROWS, COLUMNS> hadamardProduct(Matrix<element_type, ROWS, COLUMNS> A, Matrix<element_type, ROWS, COLUMNS> B){
+        Matrix<element_type, ROWS, COLUMNS> product;
+        for (std::size_t i=1; i <= A.rows; i++){
+            for (std::size_t j=1; j <= B.columns; j++){
+                product(i, j) = A(i, j) * B(i, j);
             }
         }
         
