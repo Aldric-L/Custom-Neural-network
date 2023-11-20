@@ -26,24 +26,16 @@ public:
 };
 
 template <typename element_type, std::size_t ROWS, std::size_t COLUMNS>
-class Matrix : public MatrixPrototype<element_type>
-{
+class Matrix : public MatrixPrototype<element_type> {
 public:
-    /*static std::function<element_type(element_type, std::size_t, std::size_t)> NO_ACTION_TRANSFORM;
-    static std::function<element_type(element_type, std::size_t, std::size_t)> IDENTITY_TRANSFORM;
-    static std::function<element_type(element_type, std::size_t, std::size_t)> RANDOM_TRANSFORM;*/
-    
     static inline std::function<element_type(element_type, std::size_t, std::size_t)> NO_ACTION_TRANSFORM = [](element_type x, std::size_t row, std::size_t column) {return x;};
 
-    /*static inline std::function<element_type(element_type, std::size_t, std::size_t)> IDENTITY_TRANSFORM = [](element_type x, std::size_t row, std::size_t column) { return ((column%2 != 0 && row%2 != 0) || (column%2 == 0 && row%2 == 0)) ? 1 : 0;};*/
     static inline std::function<element_type(element_type, std::size_t, std::size_t)> IDENTITY_TRANSFORM = [](element_type x, std::size_t row, std::size_t column) { return (column == row) ? 1 : 0;};
 
     static inline std::function<element_type(element_type, std::size_t, std::size_t)> RANDOM_TRANSFORM = [](element_type x, std::size_t row, std::size_t column) { std::random_device rd;  std::mt19937 gen(rd()); std::normal_distribution<double> distribution(0.0,3); return distribution(gen); };
     
-    //static Matrix<element_type, ROWS, COLUMNS> IDENTITY;
     static inline Matrix<element_type, ROWS, COLUMNS> IDENTITY = Matrix<element_type, ROWS, COLUMNS>::transform(Matrix<element_type, ROWS, COLUMNS>::EMPTY, Matrix<element_type, ROWS, COLUMNS>::IDENTITY_TRANSFORM);
 
-    //static Matrix<element_type, ROWS, COLUMNS> EMPTY;
     static inline Matrix<element_type, ROWS, COLUMNS> EMPTY = Matrix<element_type, ROWS, COLUMNS> (true);
     
     std::array <std::array <element_type, COLUMNS>, ROWS> m_data;
@@ -170,18 +162,6 @@ public:
         
     };
     
-    inline static Matrix<element_type, ROWS, COLUMNS> hadamardProduct(Matrix<element_type, ROWS, COLUMNS> A, Matrix<element_type, ROWS, COLUMNS> B){
-        Matrix<element_type, ROWS, COLUMNS> product;
-        for (std::size_t i=1; i <= A.rows; i++){
-            for (std::size_t j=1; j <= B.columns; j++){
-                product(i, j) = A(i, j) * B(i, j);
-            }
-        }
-        
-        return product;
-        
-    };
-    
     inline Matrix<element_type, ROWS, COLUMNS>& transform(std::function<element_type(element_type, std::size_t, std::size_t)> transfunc){
         Matrix<element_type, ROWS, COLUMNS>::transform(*this, transfunc); return *this;
     }
@@ -206,6 +186,19 @@ public:
             }
         }
         return matrix;
+    }
+    
+    inline void transpose(){
+        if (COLUMNS != ROWS)
+            throw std::invalid_argument("Attempting to perform a direct transposition on a non-squared matrix.");
+        
+        std::array <std::array <element_type, COLUMNS>, ROWS> new_m_data;
+        for (std::size_t i=0; i <= ROWS; i++){
+            for (std::size_t j=0; j <= COLUMNS; j++){
+                new_m_data[j][i] = m_data[i][j];
+            }
+        }
+        m_data = new_m_data;
     }
     
     inline static void cout(Matrix<element_type, ROWS, COLUMNS> matrix){

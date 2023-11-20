@@ -37,7 +37,7 @@
 
 int main(int argc, const char * argv[]) {
     std::cout << "Hello, terrible World!\n";
-    
+
     // NeuralNetwork initialization example
     akml::NeuralNetwork neuralnet;
     /*
