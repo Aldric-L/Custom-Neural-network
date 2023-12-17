@@ -37,13 +37,17 @@
 		FE7CACBA2AA9FB68002EEBD1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		FE98292D2AB334C900E5B7ED /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		FEA3E0032AEE6BB600A27C6C /* NaiveMazeQSolver.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NaiveMazeQSolver.cpp; sourceTree = "<group>"; };
+		FEC353462B2F16E3008B1FB4 /* Matrices.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Matrices.hpp; sourceTree = "<group>"; };
+		FEC353472B2F16F8008B1FB4 /* StaticMatrix.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = StaticMatrix.hpp; sourceTree = "<group>"; };
+		FEC353482B2F170D008B1FB4 /* DynamicMatrix.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = DynamicMatrix.hpp; sourceTree = "<group>"; };
+		FEC353492B2F171D008B1FB4 /* Matrix.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Matrix.hpp; sourceTree = "<group>"; };
+		FEC3534A2B2F1740008B1FB4 /* MatrixInterface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MatrixInterface.hpp; sourceTree = "<group>"; };
 		FECDAF9F2AE0174000ED1CA8 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
 		FED103262ADAD74100DFA915 /* AKML.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AKML.hpp; sourceTree = "<group>"; };
 		FED103272ADAFD0800DFA915 /* UtilityLoops.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = UtilityLoops.hpp; sourceTree = "<group>"; };
 		FED5E9CB2B0B54BF00B123F4 /* MatrixOperations.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = MatrixOperations.hpp; sourceTree = "<group>"; };
 		FEE4F7362ADBE12100E27D68 /* AKML_consts.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = AKML_consts.hpp; sourceTree = "<group>"; };
 		FEE4F7382ADC052700E27D68 /* NeuralNetwork.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NeuralNetwork.hpp; sourceTree = "<group>"; };
-		FEF384322AAB7C5E0094AA50 /* Matrix.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Matrix.hpp; sourceTree = "<group>"; };
 		FEF384382AACD8F10094AA50 /* NeuralLayer.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NeuralLayer.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -90,11 +94,12 @@
 		FE7CACB92AA9FB68002EEBD1 /* XORNeural network */ = {
 			isa = PBXGroup;
 			children = (
+				FEC353462B2F16E3008B1FB4 /* Matrices.hpp */,
+				FEC353452B2F16AA008B1FB4 /* Matrices */,
 				FE4627202AF7F1F500BB3618 /* AgentBasedUtilities */,
 				FEA3E0022AEE6B8B00A27C6C /* ML_Examples */,
 				FECDAF9F2AE0174000ED1CA8 /* CMakeLists.txt */,
 				FE7CACBA2AA9FB68002EEBD1 /* main.cpp */,
-				FEF384322AAB7C5E0094AA50 /* Matrix.hpp */,
 				FEF384382AACD8F10094AA50 /* NeuralLayer.hpp */,
 				FE2F08D62AB1A1100029A57D /* GeneticAlgorithm.cpp */,
 				FE2F08D72AB1A1100029A57D /* GeneticAlgorithm.hpp */,
@@ -102,7 +107,6 @@
 				FED103272ADAFD0800DFA915 /* UtilityLoops.hpp */,
 				FEE4F7382ADC052700E27D68 /* NeuralNetwork.hpp */,
 				FEE4F7362ADBE12100E27D68 /* AKML_consts.hpp */,
-				FED5E9CB2B0B54BF00B123F4 /* MatrixOperations.hpp */,
 			);
 			path = "XORNeural network";
 			sourceTree = "<group>";
@@ -113,6 +117,18 @@
 				FEA3E0032AEE6BB600A27C6C /* NaiveMazeQSolver.cpp */,
 			);
 			path = ML_Examples;
+			sourceTree = "<group>";
+		};
+		FEC353452B2F16AA008B1FB4 /* Matrices */ = {
+			isa = PBXGroup;
+			children = (
+				FED5E9CB2B0B54BF00B123F4 /* MatrixOperations.hpp */,
+				FEC353472B2F16F8008B1FB4 /* StaticMatrix.hpp */,
+				FEC353482B2F170D008B1FB4 /* DynamicMatrix.hpp */,
+				FEC353492B2F171D008B1FB4 /* Matrix.hpp */,
+				FEC3534A2B2F1740008B1FB4 /* MatrixInterface.hpp */,
+			);
+			path = Matrices;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

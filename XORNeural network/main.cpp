@@ -18,6 +18,7 @@
 
 // This file provides an example of the usage of AKML for simple problems like the famous XOR
 #define XOR_DIM 3
+//#define AKML_STATICMATRIX_HEAPMODE 1
 
 // AKML needs to first have the default layout of NeuralNetworks defiened
 #if XOR_DIM == 3
@@ -36,28 +37,30 @@
 #include "GeneticAlgorithm.cpp"
 
 int main(int argc, const char * argv[]) {
-    std::cout << "Hello, terrible World!\n";
+    using SINGLETON = std::array <std::array <float, 1>, 1>;
 
+    std::cout << "Hello, terrible World!\n";
+    
     // NeuralNetwork initialization example
-    akml::NeuralNetwork neuralnet;
+    //akml::NeuralNetwork neuralnet;
     /*
     Manual initialization example :
     neuralnet.setFirstLayer<3>();
     neuralnet.setLayer<6, 3>(2);
     neuralnet.setLayer<3, 6>(3);
     neuralnet.setLayer<1, 3>(4);*/
-    akml::NeuralNetwork<>::DEFAULT_INIT_INSTRUCTIONS(neuralnet);
+    //akml::NeuralNetwork<>::DEFAULT_INIT_INSTRUCTIONS(neuralnet);
     
     #if XOR_DIM == 3
-        std::array<akml::Matrix <float, 3, 1>, 8> inputs =
+        std::array<akml::StaticMatrix <float, 3, 1>, 8> inputs =
         {{ {{ {1,0,0} }}, {{ {0,0,1} }}, {{ {0,1,0} }},
            {{ {1,1,0} }}, {{ {1,0,1} }}, {{ {0,1,1} }},
            {{ {0,0,0} }}, {{ {1,1,1} }} }};
         
-        std::array<akml::Matrix <float, 1, 1>, 8> outputs =
-        {{ {{ {1} }}, {{ {1} }}, {{ {1} }},
-           {{ {0} }}, {{ {0} }}, {{ {0} }},
-           {{ {0} }}, {{ {0} }} }};
+        std::array<akml::StaticMatrix <float, 1, 1>, 8> outputs =
+        {{ (SINGLETON){{ {1} }}, (SINGLETON){{ {1} }}, (SINGLETON){{ {1} }},
+           (SINGLETON){{ {0} }}, (SINGLETON){{ {0} }}, (SINGLETON){{ {0} }},
+           (SINGLETON){{ {0} }}, (SINGLETON){{ {0} }} }};
         
 
         akml::GeneticAlgorithm<4, 3, 1, 8> ga (inputs, outputs);
@@ -66,7 +69,7 @@ int main(int argc, const char * argv[]) {
     #if XOR_DIM == 2
         std::array<akml::Matrix <float, 2, 1>, 4> inputs = {{ {{ {1,0} }}, {{ {0,0} }}, {{ {0,1} }}, {{ {1,1} }} }};
         
-        std::array<akml::Matrix <float, 1, 1>, 4> outputs = {{ {{ {1} }}, {{ {0} }}, {{ {1} }}, {{ {0} }} }};
+        std::array<akml::Matrix <float, 1, 1>, 4> outputs = {{ (SINGLETON){{ {1} }}, (SINGLETON){{ {0} }}, (SINGLETON){{ {1} }}, (SINGLETON){{ {0} }} }};
         
         akml::GeneticAlgorithm<3, 2, 1, 4> ga (inputs, outputs);
     #endif
@@ -80,7 +83,7 @@ int main(int argc, const char * argv[]) {
         std::cout << "Output expected :" << std::endl;
         std::cout << outputs[inputid];
     }
-    neuralnet.saveNetwork("cout");
+    bestnet->saveNetwork("cout");
     
     
     return 0;
