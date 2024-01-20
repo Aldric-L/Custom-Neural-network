@@ -17,8 +17,8 @@
 
 namespace akml {
 
-    template <class T, typename MATRIX_INNER_TYPE>
-    concept SaveClassConcept = std::is_base_of<akml::Save>, T>::value || std::is_base_of<akml::MatrixSave>, T>::value;
+    template <class T>
+    concept SaveClassConcept = std::is_base_of<akml::AbstractSave>, T>::value;
 
     template <SaveClassConcept SaveClass>
     class CSV_Saver {

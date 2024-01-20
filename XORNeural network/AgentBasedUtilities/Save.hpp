@@ -12,9 +12,10 @@
 #include <tuple>
 
 namespace akml {
+    class AbstractSave {};
 
     template <std::size_t parameters_nb, typename... types>
-    class Save {
+    class Save : public AbstractSave{
         private:
             template<std::size_t i>
             struct exportLayer_functor {
@@ -80,7 +81,7 @@ namespace akml {
     };
 
     template <unsigned short int parameters_nb, akml::Matrixable MATRIX_INNER_TYPE>
-    class MatrixSave {
+    class MatrixSave : public AbstractSave {
         protected:
             std::array<std::string, parameters_nb> parameters_name;
             akml::Matrix<MATRIX_INNER_TYPE, parameters_nb, 1> parameters;
