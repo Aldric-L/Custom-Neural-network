@@ -18,7 +18,7 @@
 namespace akml {
 
     template <class T>
-    concept SaveClassConcept = std::is_base_of<akml::AbstractSave>, T>::value;
+    concept SaveClassConcept = std::is_base_of<akml::AbstractSave, T>::value;
 
     template <SaveClassConcept SaveClass>
     class CSV_Saver {
