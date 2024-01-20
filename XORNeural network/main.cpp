@@ -18,7 +18,6 @@
 
 // This file provides an example of the usage of AKML for simple problems like the famous XOR
 #define XOR_DIM 3
-//#define AKML_STATICMATRIX_HEAPMODE 1
 
 // AKML needs to first have the default layout of NeuralNetworks defiened
 #if XOR_DIM == 3
