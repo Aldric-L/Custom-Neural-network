@@ -74,12 +74,12 @@ public:
         std::copy(other.getStorage(), other.getStorageEnd(), this->m_data);
     }
     
-    inline StaticMatrix(std::function<element_type(element_type, std::size_t, std::size_t)>& transfunc) : MatrixInterface<element_type>(ROWS, COLUMNS) {
+    inline StaticMatrix(const std::function<element_type(element_type, std::size_t, std::size_t)>& transfunc) : MatrixInterface<element_type>(ROWS, COLUMNS) {
         this->create();
         this->transform(transfunc);
     }
     
-    inline StaticMatrix(std::function<element_type(element_type)>& transfunc) : MatrixInterface<element_type>(ROWS, COLUMNS) {
+    inline StaticMatrix(const std::function<element_type(element_type)>& transfunc) : MatrixInterface<element_type>(ROWS, COLUMNS) {
         this->create();
         this->transform(transfunc);
     }

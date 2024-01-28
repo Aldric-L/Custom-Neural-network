@@ -25,7 +25,7 @@ protected:
     
     template<std::size_t i, std::size_t j>
     struct setLayer_functor {
-        static void run(akml::NeuralNetwork<NBLAYERS>& neuralnet, std::function<float(float)>& activation_func) {
+        static void run(akml::NeuralNetwork<NBLAYERS>& neuralnet, const akml::ActivationFunction<float>& activation_func) {
             neuralnet.setLayer<akml::NN_STRUCTURE[j], akml::NN_STRUCTURE[i]>(i+2, activation_func);
         }
     };
@@ -60,10 +60,10 @@ protected:
     
 public:
     
-    static inline std::function<float(float)> SIGMOID = [](float x) {return 1/(1+exp(-x));};
-    static inline std::function<float(float)> RELU = [](float x) {return std::max(0.f, x); };
+    //static inline std::function<float(float)> SIGMOID = [](float x) {return 1/(1+exp(-x));};
+    //static inline std::function<float(float)> RELU = [](float x) {return std::max(0.f, x); };
 
-    static inline std::function<float(float)> NO_ACTION = [](float x) {return x;};
+    //static inline std::function<float(float)> NO_ACTION = [](float x) {return x;};
     
     inline NeuralNetwork(std::string customOriginField="") : customOriginField(customOriginField) {
         for (std::size_t i(0); i < NBLAYERS; i++){
@@ -192,12 +192,14 @@ public:
     inline NeuralLayer<INPUTNUMBER, 1>* setFirstLayer(){
         layers[0] = new NeuralLayer<INPUTNUMBER, 1>(0);
         layers[0]->setFirstRow(true);
-        layers[0]->setActivationFunction(NeuralNetwork<NBLAYERS>::NO_ACTION);
+        //layers[0]->setActivationFunction(NeuralNetwork<NBLAYERS>::NO_ACTION);
+        layers[0]->setActivationFunction(akml::ActivationFunctions::NO_ACTION);
         return (NeuralLayer<INPUTNUMBER, 1>*)layers[0];
     };
     
     template <std::size_t NEURON_NUMBER, std::size_t PREVIOUS_NEURON_NUMBER>
-    inline NeuralLayer<NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>* setLayer(std::size_t layer=0, const std::function<float(float)> activation_function=NeuralNetwork<NBLAYERS>::SIGMOID){
+    //inline NeuralLayer<NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>* setLayer(std::size_t layer=0, const std::function<float(float)> activation_function=NeuralNetwork<NBLAYERS>::SIGMOID){
+    inline NeuralLayer<NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>* setLayer(std::size_t layer=0, const akml::ActivationFunction<float>& activation_function=akml::ActivationFunctions::SIGMOID){
         if (layer == 0){
             for (std::size_t i(0); i < NBLAYERS; i++){
                 if (layers[i] == nullptr)
@@ -205,16 +207,17 @@ public:
             }
         }
         
-        layers[layer-1] = new NeuralLayer<NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>(layer-1);
-        layers[layer-1]->setActivationFunction(activation_function);
+        NeuralLayer<NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>* curlay = new NeuralLayer<NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>(layer-1);
+        curlay->setActivationFunction(activation_function);
         
         StaticMatrix<float, NEURON_NUMBER, 1> new_biases;
         new_biases.transform(StaticMatrix<float, NEURON_NUMBER, 1>::RANDOM_TRANSFORM);
-        layers[layer-1]->setBiases(&new_biases);
+        curlay->setBiases(&new_biases);
         StaticMatrix<float, NEURON_NUMBER, PREVIOUS_NEURON_NUMBER> new_weights;
         new_weights.transform(StaticMatrix<float, NEURON_NUMBER, 1>::RANDOM_TRANSFORM);
-        layers[layer-1]->setWeights(&new_weights);
-        return (NeuralLayer<NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>*)layers[layer-1];
+        curlay->setWeights(&new_weights);
+        layers[layer-1] = curlay;
+        return curlay;
     };
     
     inline AbstractNeuralLayer* getLayer(std::size_t layer){
@@ -238,7 +241,7 @@ public:
             throw std::invalid_argument("You should not use a default initializer for a neural network which is not standard in layers number.");
         
         net.setFirstLayer<akml::NN_STRUCTURE[0]>();
-        akml::for_<0, NBLAYERS-1>::template run<setLayer_functor,akml::NeuralNetwork<NBLAYERS>&, std::function<float(float)>&>(net, akml::NeuralNetwork<NBLAYERS>::SIGMOID);
+        akml::for_<0, NBLAYERS-1>::template run<setLayer_functor,akml::NeuralNetwork<NBLAYERS>&, const akml::ActivationFunction<float>&>(net, akml::ActivationFunctions::SIGMOID);
     };
     
     static inline std::function<void(akml::NeuralNetwork<NBLAYERS>&)> DEFAULT_INITRELU_INSTRUCTIONS = [](NeuralNetwork<NBLAYERS>& net) {
@@ -252,8 +255,8 @@ public:
         }
             
 
-        akml::for_<0, NBLAYERS-2>::template run<setLayer_functor,akml::NeuralNetwork<NBLAYERS>&, std::function<float(float)>&>(net, akml::NeuralNetwork<NBLAYERS>::RELU);
-        akml::for_<NBLAYERS-2, NBLAYERS-1>::template run<setLayer_functor,akml::NeuralNetwork<NBLAYERS>&, std::function<float(float)>&>(net, akml::NeuralNetwork<NBLAYERS>::SIGMOID);
+        akml::for_<0, NBLAYERS-2>::template run<setLayer_functor,akml::NeuralNetwork<NBLAYERS>&, const akml::ActivationFunction<float>&>(net, akml::ActivationFunctions::RELU);
+        akml::for_<NBLAYERS-2, NBLAYERS-1>::template run<setLayer_functor,akml::NeuralNetwork<NBLAYERS>&, const akml::ActivationFunction<float>&>(net, akml::ActivationFunctions::SIGMOID);
     };
 };
 

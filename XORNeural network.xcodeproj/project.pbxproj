@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		FE2F08D82AB1A1100029A57D /* GeneticAlgorithm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE2F08D62AB1A1100029A57D /* GeneticAlgorithm.cpp */; };
 		FE4627282AF7F5AD00BB3618 /* BaseAgent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE4627262AF7F5AD00BB3618 /* BaseAgent.cpp */; };
+		FE5636AC2B651770000D3B5B /* NeuralFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE5636AA2B651770000D3B5B /* NeuralFunctions.cpp */; };
 		FE7CACBB2AA9FB68002EEBD1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FE7CACBA2AA9FB68002EEBD1 /* main.cpp */; };
 		FEA3E0042AEE6BB600A27C6C /* NaiveMazeQSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FEA3E0032AEE6BB600A27C6C /* NaiveMazeQSolver.cpp */; };
 /* End PBXBuildFile section */
@@ -33,6 +34,8 @@
 		FE4627262AF7F5AD00BB3618 /* BaseAgent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = BaseAgent.cpp; sourceTree = "<group>"; };
 		FE4627272AF7F5AD00BB3618 /* BaseAgent.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = BaseAgent.hpp; sourceTree = "<group>"; };
 		FE4627292AF7F96400BB3618 /* CMakeLists.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = CMakeLists.txt; sourceTree = "<group>"; };
+		FE5636AA2B651770000D3B5B /* NeuralFunctions.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = NeuralFunctions.cpp; sourceTree = "<group>"; };
+		FE5636AB2B651770000D3B5B /* NeuralFunctions.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = NeuralFunctions.hpp; sourceTree = "<group>"; };
 		FE7CACB72AA9FB68002EEBD1 /* XORNeural network */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "XORNeural network"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE7CACBA2AA9FB68002EEBD1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		FE98292D2AB334C900E5B7ED /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -107,6 +110,8 @@
 				FED103272ADAFD0800DFA915 /* UtilityLoops.hpp */,
 				FEE4F7382ADC052700E27D68 /* NeuralNetwork.hpp */,
 				FEE4F7362ADBE12100E27D68 /* AKML_consts.hpp */,
+				FE5636AA2B651770000D3B5B /* NeuralFunctions.cpp */,
+				FE5636AB2B651770000D3B5B /* NeuralFunctions.hpp */,
 			);
 			path = "XORNeural network";
 			sourceTree = "<group>";
@@ -190,6 +195,7 @@
 			files = (
 				FEA3E0042AEE6BB600A27C6C /* NaiveMazeQSolver.cpp in Sources */,
 				FE2F08D82AB1A1100029A57D /* GeneticAlgorithm.cpp in Sources */,
+				FE5636AC2B651770000D3B5B /* NeuralFunctions.cpp in Sources */,
 				FE7CACBB2AA9FB68002EEBD1 /* main.cpp in Sources */,
 				FE4627282AF7F5AD00BB3618 /* BaseAgent.cpp in Sources */,
 			);

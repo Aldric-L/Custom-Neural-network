@@ -15,13 +15,13 @@
 
 namespace akml {
     template <akml::MatrixConcept MATRIX_TYPE, akml::Matrixable element_type>
-    inline MATRIX_TYPE transform(MATRIX_TYPE matrix, std::function<element_type(element_type, std::size_t, std::size_t)> transfunc){
+    inline MATRIX_TYPE transform(MATRIX_TYPE matrix, const std::function<element_type(element_type, std::size_t, std::size_t)> transfunc){
         matrix.transform(transfunc);
         return matrix;
     }
 
     template <akml::MatrixConcept MATRIX_TYPE, akml::Matrixable element_type>
-    inline MATRIX_TYPE transform(MATRIX_TYPE matrix, std::function<element_type(element_type)> transfunc){
+    inline MATRIX_TYPE transform(MATRIX_TYPE matrix, const std::function<element_type(element_type)> transfunc){
         matrix.transform(transfunc);
         return matrix;
     }

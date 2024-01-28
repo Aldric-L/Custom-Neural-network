@@ -27,52 +27,13 @@ namespace akml {
 
 class GeneticAlgorithmMethods {
 public:
-
-    /* @deprecated rather use the pointer version for child. */
-    template <typename NEURAL_NET_TYPE, typename NEURAL_LAYER_TYPE>
-    static void mergeLayers(const std::size_t layer, NEURAL_NET_TYPE* parent1, NEURAL_NET_TYPE* parent2, NEURAL_NET_TYPE& child){
-        NEURAL_LAYER_TYPE* parent1_layer = (NEURAL_LAYER_TYPE*)parent1->getLayer(layer);
-        NEURAL_LAYER_TYPE* parent2_layer = (NEURAL_LAYER_TYPE*)parent2->getLayer(layer);
-        NEURAL_LAYER_TYPE* child_layer = (NEURAL_LAYER_TYPE*)child.getLayer(layer);
-        
-        if (parent2_layer == parent1_layer){
-            *(child_layer->getWeightsAccess()) = *(parent2_layer->getWeightsAccess());
-            *(child_layer->getBiasesAccess()) = *(parent2_layer->getBiasesAccess());
-            return;
-        }
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::normal_distribution<double> distribution(0.0,0.15);
-        
-        // Biases :
-        for (std::size_t row(0); row < child_layer->getNeuronNumber(); row++){
-            if (row %2 == 0)
-                child_layer->getBiasesAccess()->operator()(row+1, 1) = parent1_layer->getBiasesAccess()->operator()(row+1, 1);
-            else
-                child_layer->getBiasesAccess()->operator()(row+1, 1) = parent2_layer->getBiasesAccess()->operator()(row+1, 1);
-            child_layer->getBiasesAccess()->operator()(row+1, 1) = child_layer->getBiasesAccess()->operator()(row+1, 1) * (1+distribution(gen));
-            
-        }
-        
-        // weights :
-        for (std::size_t row(0); row < child_layer->getNeuronNumber(); row++){
-            for (std::size_t col(0); col < child_layer->getPreviousNeuronNumber(); col++){
-                if ((row+col) %2 == 0)
-                    child_layer->getWeightsAccess()->operator()(row+1, col+1) = parent1_layer->getWeightsAccess()->operator()(row+1, col+1);
-                else
-                    child_layer->getWeightsAccess()->operator()(row+1, col+1) = parent2_layer->getWeightsAccess()->operator()(row+1, col+1);
-                
-                child_layer->getWeightsAccess()->operator()(row+1, col+1) = child_layer->getWeightsAccess()->operator()(row+1, col+1) * (1+distribution(gen));
-            }
-        }
-    }
-    
     template <typename NEURAL_NET_TYPE, typename NEURAL_LAYER_TYPE>
     static void mergeLayers(const std::size_t layer, NEURAL_NET_TYPE* parent1, NEURAL_NET_TYPE* parent2, NEURAL_NET_TYPE* child){
         NEURAL_LAYER_TYPE* parent1_layer = (NEURAL_LAYER_TYPE*)parent1->getLayer(layer);
         NEURAL_LAYER_TYPE* parent2_layer = (NEURAL_LAYER_TYPE*)parent2->getLayer(layer);
         NEURAL_LAYER_TYPE* child_layer = (NEURAL_LAYER_TYPE*)child->getLayer(layer);
-        
+        //std::cout << "Old biases";
+        //std::cout << *(child_layer->getBiasesAccess());
         if (parent2_layer == parent1_layer){
             *(child_layer->getWeightsAccess()) = *(parent2_layer->getWeightsAccess());
             *(child_layer->getBiasesAccess()) = *(parent2_layer->getBiasesAccess());
@@ -103,6 +64,8 @@ public:
                 child_layer->getWeightsAccess()->operator()(row+1, col+1) = child_layer->getWeightsAccess()->operator()(row+1, col+1) * (1+distribution(gen));
             }
         }
+        //std::cout << "New";
+        //std::cout << *(child_layer->getBiasesAccess());
     }
 };
 
@@ -133,7 +96,7 @@ public:
     
     static inline std::function<void(NeuralNetwork<NBLAYERS>&, NeuralNetwork<NBLAYERS>*, NeuralNetwork<NBLAYERS>*)> DEFAULT_MERGING_INSTRUCTIONS = [](akml::NeuralNetwork<NBLAYERS>& child, akml::NeuralNetwork<NBLAYERS>* parent1, akml::NeuralNetwork<NBLAYERS>* parent2) {
         if (parent1 == parent2)
-            akml::GeneticAlgorithmMethods::mergeLayers<akml::NeuralNetwork<NBLAYERS>, akml::NeuralLayer<akml::NN_STRUCTURE[0], 1>>(1, parent1, parent2, child);
+            akml::GeneticAlgorithmMethods::mergeLayers<akml::NeuralNetwork<NBLAYERS>, akml::NeuralLayer<akml::NN_STRUCTURE[0], 1>>(1, parent1, parent2, &child);
         akml::for_<0, NBLAYERS-1>::template run<mergeLayer_functor, NeuralNetwork<NBLAYERS>*, NeuralNetwork<NBLAYERS>*, NeuralNetwork<NBLAYERS>*>(&child, parent1, parent2);
     };
     
@@ -247,7 +210,6 @@ public:
     static std::function<float(std::array<StaticMatrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH>&, std::array< StaticMatrix <float, OUTPUTNUMBER, 1> , TRAINING_LENGTH>&)> MSE;
     static std::function<float(std::array<StaticMatrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH>&, std::array< StaticMatrix <float, OUTPUTNUMBER, 1> , TRAINING_LENGTH>&)> ERRORS_COUNT;
     
-    
     inline GeneticAlgorithm(const std::array<StaticMatrix <float, INPUTNUMBER, 1>, TRAINING_LENGTH> in, const std::array<StaticMatrix <float, OUTPUTNUMBER, 1>, TRAINING_LENGTH> out, const std::function<void(NeuralNetwork<NBLAYERS>&)> instructions = NeuralNetwork<NBLAYERS>::DEFAULT_INIT_INSTRUCTIONS) : BaseGeneticAlgorithm<NBLAYERS, INPUTNUMBER, OUTPUTNUMBER, POP_SIZE>(instructions), inputs(in), outputs(out) {
     };
     
@@ -277,7 +239,6 @@ public:
             std::sort(MSE.begin(), MSE.end(), [](const std::pair<float, NeuralNetwork<NBLAYERS>*> &x, const std::pair<float, NeuralNetwork<NBLAYERS>*> &y){
                 return x.first > y.first;
             });
-            
             this->generateNewGeneration(MSE, iteration, merging_instructions);
             
             if (MSE[POP_SIZE-1].first == 0.f){

@@ -9,31 +9,34 @@
 #define NeuralLayer_hpp
 
 #include "Matrices.hpp"
+#include "NeuralFunctions.cpp"
 
 namespace akml {
 
 class AbstractNeuralLayer {
 protected:
-    std::function<float(float)> activationFunction;
+    const akml::ActivationFunction<float>* activationFunction;
     bool isFirstRow = false;
     
 public:
     const std::size_t neuronNumber, previousNeuronNumber, layerId;
     
-    AbstractNeuralLayer(const std::size_t neuronNumber, const std::size_t previousNeuronNumber, const std::size_t layerId) : neuronNumber(neuronNumber), previousNeuronNumber(previousNeuronNumber), layerId(layerId) {}
+    AbstractNeuralLayer(const std::size_t neuronNumber, const std::size_t previousNeuronNumber, const std::size_t layerId) : neuronNumber(neuronNumber), previousNeuronNumber(previousNeuronNumber), layerId(layerId), activationFunction(nullptr) {}
+    
+    inline virtual ~AbstractNeuralLayer() {};
     
     inline std::size_t getNeuronNumber(){ return neuronNumber; }
     inline std::size_t getPreviousNeuronNumber(){ return previousNeuronNumber; }
     
-    inline void setActivationFunction(std::function<float(float)> actfunc){ activationFunction = actfunc; }
+    inline void setActivationFunction(const akml::ActivationFunction<float>& actfunc){ activationFunction = &actfunc; }
     
     inline void setFirstRow(const bool first_row){ isFirstRow = first_row; }
     
-    inline virtual void setInput(MatrixInterface<float>* arg) { return; };
-    inline virtual void setBiases(MatrixInterface<float>* new_biases) { return; };
-    inline virtual void setWeights(MatrixInterface<float>* new_weights) { return; };
-    inline virtual void setPreviousActivationLayer(MatrixInterface<float>* argument) { return; };
-    inline virtual MatrixInterface<float>* getActivationLayer() { MatrixInterface<float>* rtrn = new DynamicMatrix<float>(1, 1); return rtrn; };
+    inline virtual void setInput(MatrixInterface<float>* arg) = 0;
+    inline virtual void setBiases(const MatrixInterface<float>* new_biases) = 0;
+    inline virtual void setWeights(const MatrixInterface<float>* new_weights) = 0;
+    inline virtual void setPreviousActivationLayer(MatrixInterface<float>* argument) = 0;
+    inline virtual MatrixInterface<float>* getActivationLayer() = 0;
 };
 
 
@@ -47,14 +50,14 @@ private:
     
 public:
     
-    NeuralLayer(const std::size_t layerId) : AbstractNeuralLayer(NEURON_NUMBER, PREVIOUS_NEURON_NUMBER, layerId) {
-        weights.transform([](float x, std::size_t row, std::size_t column) {return 1;});
-        previousActivationLayer = nullptr;
+    NeuralLayer(const std::size_t layerId) : AbstractNeuralLayer(NEURON_NUMBER, PREVIOUS_NEURON_NUMBER, layerId), previousActivationLayer(nullptr) {
+        weights.transform([](float x) {return 1;});
     }
     
     inline ~NeuralLayer() {
-        if (previousActivationLayer != nullptr)
-            delete previousActivationLayer;
+        // No need to delete anything as every previousActivationLayer points toward the first activationLayer that will be destroyed automatically by the first layer
+        /*if (previousActivationLayer != nullptr)
+            delete previousActivationLayer;*/
     };
     
     inline void setInput(MatrixInterface<float>* arg) {
@@ -62,38 +65,25 @@ public:
             throw std::exception();
         
         ownActivationLayer = *((StaticMatrix<float, NEURON_NUMBER, 1>*)arg);
-        if (previousActivationLayer == nullptr)
-            delete previousActivationLayer;
-        // This is oddly a memory leak... but thanksfully it is not necessary to define previous activation Layer for the first layer
-        // It was only more "humanly-coherent"
-        //previousActivationLayer = new StaticMatrix<float, PREVIOUS_NEURON_NUMBER, 1>;
-        //previousActivationLayer->operator()(1,1) = 1;
+        /*if (previousActivationLayer != nullptr)
+            delete previousActivationLayer;*/
+        //previousActivationLayer = nullptr;
     }
     
-    inline void setBiases(MatrixInterface<float>* arg) {
+    inline void setBiases(const MatrixInterface<float>* arg) {
         biases = *((StaticMatrix<float, NEURON_NUMBER, 1>*)arg);
     }
     
-    inline StaticMatrix<float, NEURON_NUMBER, 1>* getBiasesAccess(){
-        StaticMatrix<float, NEURON_NUMBER, 1>* b_point (&biases);
-        return b_point;
+    inline StaticMatrix<float, NEURON_NUMBER, 1>* getBiasesAccess(){ return &biases; }
+    
+    inline void setWeights(const MatrixInterface<float>* arg) {
+        weights = *((StaticMatrix<float, NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>*)arg);
     }
     
-    inline void setWeights(MatrixInterface<float>* arg) {
-        StaticMatrix<float, NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>* new_weights(0);
-        new_weights = (StaticMatrix<float, NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>*)arg;
-        weights = *new_weights;
-    }
+    inline StaticMatrix<float, NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>* getWeightsAccess (){ return &weights; }
     
-    inline StaticMatrix<float, NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>* getWeightsAccess (){
-        StaticMatrix<float, NEURON_NUMBER, PREVIOUS_NEURON_NUMBER>* w_point (&weights);
-        return w_point;
-    }
-    
-    inline StaticMatrix<float, PREVIOUS_NEURON_NUMBER, 1>* getPreviousActivationLayer (){
-        return previousActivationLayer;
-    }
-    
+    inline StaticMatrix<float, PREVIOUS_NEURON_NUMBER, 1>* getPreviousActivationLayer (){ return previousActivationLayer; }
+        
     inline void setPreviousActivationLayer(MatrixInterface<float>* arg) {
         StaticMatrix<float, PREVIOUS_NEURON_NUMBER, 1>* prev(0);
         prev = (StaticMatrix<float, PREVIOUS_NEURON_NUMBER, 1>*)arg;
@@ -104,7 +94,9 @@ public:
         if (!isFirstRow){
             ownActivationLayer = StaticMatrix<float, NEURON_NUMBER, 1>::product(weights, *previousActivationLayer);
             ownActivationLayer += biases;
-            ownActivationLayer.transform(activationFunction);
+            if (activationFunction == nullptr)
+                throw std::invalid_argument("No activation function provided");
+            ownActivationLayer.transform(activationFunction->function);
         }
         return &ownActivationLayer;
     }

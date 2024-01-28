@@ -86,7 +86,7 @@ public:
     
     inline bool is_squared(){ return (this->getNColumns() == this->getNRows()); }
     
-    inline void transform(std::function<element_type(element_type, std::size_t, std::size_t)> transfunc){
+    inline void transform(const std::function<element_type(element_type, std::size_t, std::size_t)> transfunc){
         for (std::size_t i(0); i < (this->rows); i++){
             for (std::size_t j(0); j < (this->columns); j++){
                 operator[]({i, j}) = transfunc(operator[]({i, j}), i, j);
@@ -94,7 +94,7 @@ public:
         }
     }
     
-    inline void transform(std::function<element_type(element_type)> transfunc){
+    inline void transform(const std::function<element_type(element_type)> transfunc){
         for (std::size_t i(0); i < (this->rows)*(this->columns); i++){
             *(getInternElement(i)) = transfunc(*getInternElement(i));
         }

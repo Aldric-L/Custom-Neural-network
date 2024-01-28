@@ -30,8 +30,8 @@
             filePath = "XORNeural network/NeuralNetwork.hpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "232"
-            endingLineNumber = "232"
+            startingLineNumber = "235"
+            endingLineNumber = "235"
             landmarkName = "process(input)"
             landmarkType = "7">
          </BreakpointContent>
@@ -46,8 +46,8 @@
             filePath = "XORNeural network/GeneticAlgorithm.hpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
             landmarkName = "run(child, parent1, parent2)"
             landmarkType = "7">
             <Locations>
@@ -94,8 +94,8 @@
             filePath = "XORNeural network/GeneticAlgorithm.hpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
+            startingLineNumber = "84"
+            endingLineNumber = "84"
             landmarkName = "run(child, parent1, parent2)"
             landmarkType = "7">
             <Locations>
@@ -142,8 +142,8 @@
             filePath = "XORNeural network/GeneticAlgorithm.hpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "122"
-            endingLineNumber = "122"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
             landmarkName = "mergeLayer_functor"
             landmarkType = "14">
          </BreakpointContent>
@@ -158,8 +158,8 @@
             filePath = "XORNeural network/GeneticAlgorithm.hpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "130"
-            endingLineNumber = "130"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
             landmarkName = "BaseGeneticAlgorithm"
             landmarkType = "3">
          </BreakpointContent>
@@ -174,8 +174,8 @@
             filePath = "XORNeural network/NeuralLayer.hpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "113"
-            endingLineNumber = "113"
+            startingLineNumber = "105"
+            endingLineNumber = "105"
             landmarkName = "saveLayer(buffer, id)"
             landmarkType = "7">
          </BreakpointContent>
@@ -206,8 +206,8 @@
             filePath = "XORNeural network/NeuralLayer.hpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "114"
-            endingLineNumber = "114"
+            startingLineNumber = "106"
+            endingLineNumber = "106"
             landmarkName = "saveLayer(buffer, id)"
             landmarkType = "7">
             <Locations>
@@ -705,8 +705,8 @@
             filePath = "XORNeural network/Matrices/DynamicMatrix.hpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "323"
-            endingLineNumber = "323"
+            startingLineNumber = "342"
+            endingLineNumber = "342"
             landmarkName = "transpose()"
             landmarkType = "7">
             <Locations>
@@ -756,6 +756,192 @@
             startingLineNumber = "71"
             endingLineNumber = "71"
             landmarkName = "StaticMatrix(other)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "747736C0-DF2C-4E13-AEB7-67114D0BF11F"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "XORNeural network/NeuralLayer.hpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "99"
+            endingLineNumber = "99"
+            landmarkName = "getActivationLayer()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "747736C0-DF2C-4E13-AEB7-67114D0BF11F - 25f57b1abe414ec4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "akml::NeuralLayer&lt;3ul, 1ul&gt;::getActivationLayer()"
+                  moduleName = "XORNeural network"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/NeuralLayer.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "100"
+                  endingLineNumber = "100"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "747736C0-DF2C-4E13-AEB7-67114D0BF11F - ae36b81812c5dad9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "akml::NeuralLayer&lt;6ul, 3ul&gt;::getActivationLayer()"
+                  moduleName = "XORNeural network"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/NeuralLayer.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "100"
+                  endingLineNumber = "100"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "747736C0-DF2C-4E13-AEB7-67114D0BF11F - 41271024d26acdd9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "akml::NeuralLayer&lt;3ul, 6ul&gt;::getActivationLayer()"
+                  moduleName = "XORNeural network"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/NeuralLayer.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "100"
+                  endingLineNumber = "100"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "747736C0-DF2C-4E13-AEB7-67114D0BF11F - 8cbb346c915f44c4"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "akml::NeuralLayer&lt;1ul, 3ul&gt;::getActivationLayer()"
+                  moduleName = "XORNeural network"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/NeuralLayer.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "100"
+                  endingLineNumber = "100"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "747736C0-DF2C-4E13-AEB7-67114D0BF11F - 25f57b1abe414e58"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "akml::NeuralLayer&lt;3ul, 1ul&gt;::getActivationLayer()"
+                  moduleName = "XORNeural network"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/NeuralLayer.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "747736C0-DF2C-4E13-AEB7-67114D0BF11F - ae36b81812c5da45"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "akml::NeuralLayer&lt;6ul, 3ul&gt;::getActivationLayer()"
+                  moduleName = "XORNeural network"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/NeuralLayer.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "747736C0-DF2C-4E13-AEB7-67114D0BF11F - 41271024d26acd45"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "akml::NeuralLayer&lt;3ul, 6ul&gt;::getActivationLayer()"
+                  moduleName = "XORNeural network"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/NeuralLayer.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "216">
+               </Location>
+               <Location
+                  uuid = "747736C0-DF2C-4E13-AEB7-67114D0BF11F - 8cbb346c915f4458"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "akml::NeuralLayer&lt;1ul, 3ul&gt;::getActivationLayer()"
+                  moduleName = "XORNeural network"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/aldric-l/Documents/C++%20Dev/XORNeural%20network/XORNeural%20network/NeuralLayer.hpp"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "96"
+                  endingLineNumber = "96"
+                  offsetFromSymbolStart = "216">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7F4E0023-1577-4C7B-92AD-3C0831139EF9"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "XORNeural network/NeuralNetwork.hpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "run(neuralnet, activation_func)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CD902702-9B55-495D-A4F0-869096F62BAC"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "XORNeural network/GeneticAlgorithm.hpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
+            landmarkName = "generateNewGeneration(MSE, iteration, DEFAULT_MERGING_INSTRUCTIONS)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "30DCA599-AF33-4B01-998F-8096A3082C2B"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "XORNeural network/NeuralLayer.hpp"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "59"
+            endingLineNumber = "59"
+            landmarkName = "~NeuralLayer()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

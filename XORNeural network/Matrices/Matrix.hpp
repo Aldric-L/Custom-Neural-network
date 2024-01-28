@@ -38,9 +38,9 @@ public:
     
     inline Matrix(const std::array <std::array <element_type, COLUMNS>, ROWS>& data) : DynamicMatrix<element_type>(data) {}
     
-    inline Matrix(std::function<element_type(element_type, std::size_t, std::size_t)>& transfunc) : DynamicMatrix<element_type>(ROWS, COLUMNS, transfunc) {}
+    inline Matrix(const std::function<element_type(element_type, std::size_t, std::size_t)>& transfunc) : DynamicMatrix<element_type>(ROWS, COLUMNS, transfunc) {}
     
-    inline Matrix(std::function<element_type(element_type)>& transfunc) : DynamicMatrix<element_type>(ROWS, COLUMNS, transfunc) {}
+    inline Matrix(const std::function<element_type(element_type)>& transfunc) : DynamicMatrix<element_type>(ROWS, COLUMNS, transfunc) {}
  
     //copy constructors
     inline Matrix(const Matrix<element_type, ROWS, COLUMNS>& other) : DynamicMatrix<element_type>(ROWS, COLUMNS, true) {

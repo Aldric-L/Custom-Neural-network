@@ -100,6 +100,25 @@ public:
         }
     }
     
+    //Column-based constructor
+    template <akml::MatrixInterfaceConcept<element_type> MatrixC>
+    inline DynamicMatrix(const std::vector<MatrixC*>& cols) : MatrixInterface<element_type>(cols[0]->getNRows(), cols.size()) {
+        if (cols.size() == 0)
+            throw std::invalid_argument("Empty initialize list.");
+        
+        for (std::size_t col(0); col < this->columns; col++){
+            if (cols.at(col)->getNRows() != this->rows)
+                throw std::invalid_argument("Heterogeneous initialize list.");
+        }
+        
+        this->createInternStorage();
+        for (std::size_t line(0); line < this->rows; line++){
+            for (std::size_t col(0); col < this->columns; col++){
+                *(this->m_data + line*(this->columns)+col) = cols.at(col)->read(line+1, 1);
+            }
+        }
+    }
+    
     template<std::size_t ROWS>
     inline DynamicMatrix(const std::vector<akml::Matrix<element_type, ROWS, 1>>& cols) : MatrixInterface<element_type>(ROWS, cols.size()) {
         if (cols.size() == 0)
@@ -123,12 +142,12 @@ public:
         }
     }
     
-    inline DynamicMatrix(const std::size_t rows, const std::size_t columns, std::function<element_type(element_type, std::size_t, std::size_t)>& transfunc) : MatrixInterface<element_type>(rows, columns) {
+    inline DynamicMatrix(const std::size_t rows, const std::size_t columns, const std::function<element_type(element_type, std::size_t, std::size_t)>& transfunc) : MatrixInterface<element_type>(rows, columns) {
         this->create();
         this->transform(transfunc);
     }
     
-    inline DynamicMatrix(const std::size_t rows, const std::size_t columns, std::function<element_type(element_type)>& transfunc) : MatrixInterface<element_type>(rows, columns) {
+    inline DynamicMatrix(const std::size_t rows, const std::size_t columns, const std::function<element_type(element_type)>& transfunc) : MatrixInterface<element_type>(rows, columns) {
         this->create();
         this->transform(transfunc);
     }
