@@ -6,7 +6,7 @@ The main goal of this project is to build from scratch and with the help of as l
 
 For now, this project has as goal to provide an implementation of a MultiLayer Perceptron with a Genetic algorithm and a gradient descent. 
 
-The main project is written in C++ with the standard library and without any dynamic container (no std::list or std::vector in the core of the neural network). Hence, the code is harsh, and an absolute nightmare to read and use. Nonetheless, this constraint allows us to better follow the maths behind the project (matrix are by definition statics arrays... no matter how much programmers would like the contrary) and to be very memory-efficient.  
+The main project is written in C++ with the standard library and without any dynamic container. v0.1 is only implemented using static programming and variadic templates. In order to simplify the code and to make it more useful for bigger projects, the v0.2 abandons this idea and provide lighter implementations with dynamic containers. 
 
 
 ## Stage of development 
