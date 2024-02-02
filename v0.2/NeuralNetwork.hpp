@@ -20,6 +20,7 @@ namespace akml {
 class NeuralNetwork {
 public:
     typedef std::vector<std::pair<std::size_t, const akml::ActivationFunction<float>*>> initialize_list_type;
+    const typedef enum { GRADIENT_DESCENT=-1, GRADIENT_ASCENT=1} GRADIENT_METHODS;
     
 protected:
     const std::string customOriginField;
@@ -41,6 +42,9 @@ public:
                 layers[i]->setBiases(akml::transform(layers[i]->getBiases(), layers[i]->getBiases().RANDOM_TRANSFORM));
                 layers[i]->setWeights(akml::transform(layers[i]->getWeights(), layers[i]->getWeights().RANDOM_TRANSFORM));
             }
+        }
+        for (std::size_t i(0); i < layers_list.size(); i++){
+            layers.at(i)->setNextLayer((i+1 < layers_list.size()) ? layers.at(i+1) : nullptr);
         }
     };
     
@@ -65,6 +69,9 @@ public:
                 layers[i]->setWeights(akml::transform(layers[i]->getWeights(), layers[i]->getWeights().RANDOM_TRANSFORM));
             }
         }
+        for (std::size_t i(0); i < layers_list.size(); i++){
+            layers.at(i)->setNextLayer((i+1 < layers_list.size()) ? layers.at(i+1) : nullptr);
+        }
         
     }
     
@@ -76,7 +83,7 @@ public:
     };
     
     inline std::string getCustomOriginField() const { return customOriginField; }
-    inline NeuralLayer* getLayer(const std::size_t layer) const { return layers[layer-1]; };
+    inline NeuralLayer* getLayer(const std::size_t layer) const { return layers.at(layer); };
     inline std::vector<NeuralLayer*> getLayers() const { return layers; };
     inline std::size_t getLayerNb() const { return layers_nb; };
     
@@ -94,6 +101,96 @@ public:
         return layers.back()->getActivationLayer();
     }
     
+    inline void stochGradientTraining(const std::vector<akml::DynamicMatrix<float>> inputs_set,
+                                      const std::vector<akml::DynamicMatrix<float>> outputs_set,
+                                      const std::size_t batch_size,
+                                      float learning_rate = 0.01,
+                                      const std::size_t max_epochs = 1000,
+                                      const double tolerance = 1e-6,
+                                      const akml::ErrorFunction<float, DynamicMatrix<float>>* errorFunc=&akml::ErrorFunctions::MSE,
+                                      const GRADIENT_METHODS method=GRADIENT_METHODS::GRADIENT_DESCENT){
+        
+        if (inputs_set.size() != outputs_set.size())
+            throw std::invalid_argument("Training set size irregular.");
+        
+        if (inputs_set.size() < batch_size)
+            throw std::invalid_argument("Batch_size is too big.");
+        
+        std::size_t epochs(0);
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<std::size_t> distribution(0,inputs_set.size()-batch_size);
+        do {
+            std::size_t start = distribution(gen);
+            std::vector<akml::DynamicMatrix<float>> batch_grads;
+            batch_grads.reserve(batch_size);
+            
+            std::vector<akml::DynamicMatrix<float>> temp_outputs;
+            std::vector<akml::DynamicMatrix<float>> temp_outputs_expected;
+            temp_outputs.reserve(batch_size);
+            temp_outputs_expected.reserve(batch_size);
+            for (std::size_t start_i(start); start_i < std::min(start+batch_size+1, inputs_set.size()-batch_size+1); start_i++){
+                for (std::size_t input_id(start_i); input_id < start_i + batch_size; input_id++){
+                    akml::DynamicMatrix<float> r = this->process(inputs_set.at(input_id));
+                    akml::DynamicMatrix<float> errorGrad = errorFunc->local_derivative(r, outputs_set.at(input_id));
+                    temp_outputs.emplace_back(std::move(r));
+                    temp_outputs_expected.emplace_back(outputs_set.at(input_id));
+                    batch_grads.emplace_back(std::move(this->computeInnerGradient(errorGrad)));
+                }
+                std::cout << "\nEPOCH " << epochs << " / " << max_epochs << ": MSE=" << errorFunc->sumfunction(temp_outputs, temp_outputs_expected) << " LR=" << learning_rate;
+                temp_outputs.clear();
+                temp_outputs_expected.clear();
+                akml::DynamicMatrix<float> final_grad = akml::mean(batch_grads);
+                final_grad = method * learning_rate * final_grad;
+                if (learning_rate < tolerance || akml::arg_max(final_grad, true) < tolerance){
+                    std::cout << "\n Inactivity detected. End training.";
+                    break;
+                }
+                this->mooveCoefficients(std::move(final_grad), tolerance);
+                batch_grads.clear();
+            }
+            learning_rate *= 0.9999;
+            epochs++;
+        }while (epochs < max_epochs);
+        
+    }
+    
+    inline akml::DynamicMatrix<float> computeInnerGradient(akml::DynamicMatrix<float>& errorGrad){
+        std::vector<float> coefs;
+        for (std::size_t layer_id(1); layer_id < layers.size(); layer_id++){
+            DynamicMatrix<float> temp = layers.at(layer_id)->computeLayerError(errorGrad);
+            for (std::size_t row(0); row < layers.at(layer_id)->getWeightsAccess().getNRows(); row++){
+                for (std::size_t col(0); col < layers.at(layer_id)->getWeightsAccess().getNColumns(); col++){
+                    coefs.push_back(layers.at(layer_id-1)->getActivationLayer()[{col, 0}] * temp[{row, 0}]);
+                }
+            }
+            for (std::size_t row(0); row < temp.getNRows(); row++){
+                coefs.push_back(temp[{row, 0}]);
+            }
+        }
+        DynamicMatrix<float> result (coefs.size(), 1);
+        result.forceByteCopy(&coefs[0]);
+        return result;
+    }
+    
+protected:
+    inline void mooveCoefficients(akml::DynamicMatrix<float>&& coefsdiff, const double tolerance = 1e-6){
+        std::size_t incr(0);
+        for (std::size_t layer_id(1); layer_id < layers.size(); layer_id++){
+            for (std::size_t row(0); row < layers.at(layer_id)->getWeightsAccess().getNRows(); row++){
+                for (std::size_t col(0); col < layers.at(layer_id)->getWeightsAccess().getNColumns(); col++){
+                    if (std::abs(coefsdiff[{incr, 0}]) > tolerance)
+                        layers.at(layer_id)->getWeightsAccess()[{row, col}] += coefsdiff[{incr, 0}];
+                    incr++;
+                }
+            }
+            for (std::size_t row(0); row < layers.at(layer_id)->getBiasesAccess().getNRows(); row++){
+                if (std::abs(coefsdiff[{incr, 0}]) > tolerance)
+                    layers.at(layer_id)->getBiasesAccess()[{row, 0}] += coefsdiff[{incr, 0}];
+                incr++;
+            }
+        }
+    }
 };
 
 }

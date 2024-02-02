@@ -24,6 +24,11 @@ public:
     
     inline Matrix(const bool fromscratch=false) : DynamicMatrix<element_type>(ROWS, COLUMNS, fromscratch) {};
     
+    inline Matrix(const std::size_t rows, const std::size_t columns, const bool fromscratch=false) : DynamicMatrix<element_type>(ROWS, COLUMNS, fromscratch) {
+        if (rows != ROWS || columns != COLUMNS)
+            throw std::invalid_argument("Irregular initialization (contradictory dimension initialization).");
+    }
+    
     //Column-based constructor
     inline Matrix(const std::array<akml::Matrix<element_type, ROWS, 1>, COLUMNS>& cols) : DynamicMatrix<element_type>(ROWS, COLUMNS, false) {
         if (cols.size() == 0)
@@ -86,6 +91,7 @@ public:
     }
     
     inline Matrix<element_type, ROWS, COLUMNS>& operator=(Matrix<element_type, ROWS, COLUMNS>&& other) {
+        this->deleteInternStorage();
         this->setMDataPointer(other.getStorage());
         other.setMDataPointer(nullptr);
         return *this;

@@ -19,7 +19,9 @@ protected:
     DynamicMatrix<float> previousActivationLayer;
     DynamicMatrix<float> weights;
     DynamicMatrix<float> biases;
+    DynamicMatrix<float> errorLayer;
     NeuralLayer* previousLayer;
+    NeuralLayer* nextLayer;
     const akml::ActivationFunction<float>* activationFunction;
     std::size_t neuronNumber, previousNeuronNumber, layerId;
     
@@ -32,7 +34,9 @@ public:
         previousNeuronNumber((prevLayer != nullptr) ? prevLayer->getNeuronNumber() : 1),
         weights(neuronNumber, (prevLayer != nullptr) ? prevLayer->getNeuronNumber() : 1),
         activationFunction(nullptr),
-        previousActivationLayer((prevLayer != nullptr) ? prevLayer->getNeuronNumber() : 1, 1) {
+        previousActivationLayer((prevLayer != nullptr) ? prevLayer->getNeuronNumber() : 1, 1),
+        nextLayer(nullptr),
+        errorLayer(neuronNumber, 1){
         weights.transform([](float x) {return 1;});
     }
     
@@ -52,6 +56,7 @@ public:
     inline void setBiases(const DynamicMatrix<float>& new_biases) { biases = new_biases; }
     inline void setWeights(const DynamicMatrix<float>& new_weights) { weights = new_weights; }
     inline void setPreviousActivationLayer(const DynamicMatrix<float>& prev) { previousActivationLayer = prev; }
+    inline void setNextLayer(NeuralLayer* next) { nextLayer = next; }
 
     inline DynamicMatrix<float>& getBiasesAccess(){ return biases; }
     inline DynamicMatrix<float> getBiases(){ return biases; }
@@ -69,6 +74,22 @@ public:
             ownActivationLayer.transform(activationFunction->function);
         }
         return ownActivationLayer;
+    }
+    
+    inline DynamicMatrix<float> computeLayerError(const akml::DynamicMatrix<float>& errorGrad){
+        if (nextLayer != nullptr && previousLayer != nullptr){
+            // Intermediary layers
+            errorLayer = akml::hadamard_product(akml::matrix_product(akml::transpose(nextLayer->getWeights()), nextLayer->computeLayerError(errorGrad)), akml::transform(akml::matrix_product(weights, previousLayer->getActivationLayer()) + biases, activationFunction->derivative));
+        }else if (previousLayer == nullptr){
+            // First layer
+            errorLayer = akml::hadamard_product(akml::matrix_product(akml::transpose(nextLayer->getWeights()), nextLayer->computeLayerError(errorGrad)), (activationFunction == nullptr) ? ownActivationLayer : akml::transform(ownActivationLayer,  activationFunction->derivative));
+        }else {
+            // Last layer
+            errorLayer = akml::hadamard_product(errorGrad, akml::transform(akml::matrix_product(weights, previousLayer->getActivationLayer()) + biases, activationFunction->derivative));
+        }
+        //std::cout << "\n Layer " << layerId << " \n";
+        //std::cout << errorLayer;
+        return errorLayer;
     }
 };
 

@@ -56,7 +56,6 @@ public:
     static inline merging_process_type DEFAULT_MERGING_INSTRUCTIONS = [](akml::NeuralNetwork* child, akml::NeuralNetwork* parent1, akml::NeuralNetwork* parent2) {
         std::random_device rd;
         std::mt19937 gen(rd());
-        //std::normal_distribution<double> distribution(0.0,0.15);
         std::normal_distribution<double> distribution(0.0,GeneticAlgorithm::sigma);
         
         for (std::size_t layer_id(1); layer_id < child->getLayerNb(); layer_id++){

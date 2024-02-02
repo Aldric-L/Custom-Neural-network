@@ -26,7 +26,8 @@ namespace akml {
     struct ErrorFunction {
         const std::function<T(const MATRIX_TYPE&, const MATRIX_TYPE&)> function;
         const std::function<T(const std::vector<MATRIX_TYPE>&, const std::vector<MATRIX_TYPE>&)> sumfunction;
-        const std::function<T(const MATRIX_TYPE&, const MATRIX_TYPE&)> derivative;
+        const std::function<MATRIX_TYPE(const MATRIX_TYPE&, const MATRIX_TYPE&)> derivative;
+        const std::function<MATRIX_TYPE(const MATRIX_TYPE, const MATRIX_TYPE)> local_derivative;
     };
 
 }
