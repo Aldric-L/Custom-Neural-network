@@ -438,5 +438,44 @@ namespace akml {
         akml::DynamicMatrix<MATRIX_INNER_TYPE> newmat((std::array<std::array<MATRIX_INNER_TYPE, 1>, sizeof...(MATRIX_INNER_TYPES)>){{ {elements}... }});
         return newmat;
     }
+
+    template<akml::Matrixable MATRIX_INNER_TYPE>
+    inline akml::DynamicMatrix<MATRIX_INNER_TYPE> make_diagonal(const akml::DynamicMatrix<MATRIX_INNER_TYPE>& mat) {
+        if (!mat.isInitialized())
+            throw std::invalid_argument("Matrix provided is not initialized.");
+        if (mat.getNRows() > 1 && mat.getNColumns() > 1)
+            throw std::invalid_argument("Error with matrix dimension.");
+            
+        akml::DynamicMatrix<MATRIX_INNER_TYPE> res ((mat.getNRows() == 1) ? mat.getNColumns() : mat.getNRows(), (mat.getNRows() == 1) ? mat.getNColumns() : mat.getNRows());
+        for (std::size_t row(0); row < std::max(mat.getNRows(), mat.getNColumns()); row++){
+            res[{row, row}] = (mat.getNRows() == 1) ?  mat[{0, row}] : mat[{row, 0}];
+        }
+        return res;
+    }
+
+    template <akml::MatrixConcept MATRIX_TYPE>
+    inline MATRIX_TYPE& make_identity(MATRIX_TYPE& A){
+        if (!A.isInitialized())
+            throw std::invalid_argument("Matrix provided is not initialized.");
+        if (A.getNColumns() != A.getNRows())
+            throw std::invalid_argument("Identity matrix is a squared matrix.");
+        
+        for (std::size_t row(0); row < A.getNRows(); row++){
+            for (std::size_t col(0); col < A.getNColumns(); col++){
+                A[{row, col}] = (row == col) ? 1 : 0;
+            }
+        }
+        return A;
+    };
+
+    template <akml::MatrixConcept MATRIX_TYPE>
+    inline MATRIX_TYPE make_identity(const std::size_t dim){
+        MATRIX_TYPE A (dim, dim);
+        for (std::size_t row(0); row < dim; row++){
+            A[{row, row}] = 1;
+        }
+        return A;
+    };
+
 }
 #endif /* MatrixOperations_h */

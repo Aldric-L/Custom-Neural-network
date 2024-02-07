@@ -25,6 +25,9 @@ public:
     
     inline void resize(std::size_t r, std::size_t c){
         if (this->isInitialized()){
+            if (c == this->getNColumns() && r == this->getNRows())
+                return;
+            
             element_type* newstorage = new element_type[r*c];
             for (std::size_t line(0); line < r; line++){
                 for (std::size_t col(0); col < c; col++){
@@ -173,6 +176,12 @@ public:
         this->deleteInternStorage();
     }
     
+    template <akml::MatrixConcept MATRIX_TYPE>
+    inline void forceAssignement(const MATRIX_TYPE& matrix){
+        this->resize(matrix.getNRows(), matrix.getNColumns());
+        this->operator=(matrix);
+    }
+    
     inline void forceByteCopy(const element_type* storage, std::size_t len=0){
         std::copy(storage, storage + ((len == 0) ? (this->rows)*(this->columns) : len), this->m_data);
     }
@@ -314,6 +323,8 @@ public:
     inline DynamicMatrix<element_type>& operator*=(const MatrixC& mat){
         if (!mat.isInitialized())
             throw std::invalid_argument("Matrix provided is not initialized.");
+        if (mat.getNColumns() != (this->columns) || mat.getNRows() != (this->rows))
+            throw std::invalid_argument("Matrices should be equally sized to be assignable.");
         
         this->forceByteCopy(product(*this, mat).getStorage());
         return *this;

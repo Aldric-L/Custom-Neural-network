@@ -135,7 +135,7 @@ public:
                     akml::DynamicMatrix<float> errorGrad = errorFunc->local_derivative(r, outputs_set.at(input_id));
                     temp_outputs.emplace_back(std::move(r));
                     temp_outputs_expected.emplace_back(outputs_set.at(input_id));
-                    batch_grads.emplace_back(std::move(this->computeInnerGradient(errorGrad)));
+                    batch_grads.emplace_back(std::move(this->computeErrorGradient(errorGrad)));
                 }
                 std::cout << "\nEPOCH " << epochs << " / " << max_epochs << ": MSE=" << errorFunc->sumfunction(temp_outputs, temp_outputs_expected) << " LR=" << learning_rate;
                 temp_outputs.clear();
@@ -155,7 +155,7 @@ public:
         
     }
     
-    inline akml::DynamicMatrix<float> computeInnerGradient(akml::DynamicMatrix<float>& errorGrad){
+    inline akml::DynamicMatrix<float> computeErrorGradient(akml::DynamicMatrix<float>& errorGrad){
         std::vector<float> coefs;
         for (std::size_t layer_id(1); layer_id < layers.size(); layer_id++){
             DynamicMatrix<float> temp = layers.at(layer_id)->computeLayerError(errorGrad);
@@ -171,6 +171,30 @@ public:
         DynamicMatrix<float> result (coefs.size(), 1);
         result.forceByteCopy(&coefs[0]);
         return result;
+    }
+    
+    inline akml::DynamicMatrix<float> computeGradient(){
+        akml::DynamicMatrix<float> gradient (akml::make_identity<akml::DynamicMatrix<float>>(layers.back()->getNeuronNumber()));
+    
+        for (std::size_t lay(1); lay < layers.size()-1; lay++){
+            if (layers.at(layers.size()-lay)->getPreActivationLayer() == nullptr)
+                throw std::invalid_argument("The neuralNetwork need to have been asked with an input, before asking to compute gradient of the input.");
+            
+            if (layers.at(layers.size()-lay)->getActivationFunction() == nullptr)
+                throw std::invalid_argument("The neuralNetwork has an hidden layer without activation function.");
+                
+            /*akml::DynamicMatrix<float> jacobian (akml::make_diagonal(akml::transform(*(layers.at(layers.size()-lay)->getPreActivationLayer()), layers.at(layers.size()-lay)->getActivationFunction()->derivative)));
+            akml::DynamicMatrix<float> w (layers.at(layers.size()-lay)->getWeights());
+            akml::DynamicMatrix<float> r (akml::matrix_product<float>(gradient, akml::matrix_product<float>(jacobian, w)));
+            gradient.forceAssignement(r);*/
+            
+            gradient.forceAssignement(akml::matrix_product<float>(gradient, akml::matrix_product<float>(
+            // Jacobian computation
+            akml::make_diagonal(akml::transform(*(layers.at(layers.size()-lay)->getPreActivationLayer()), layers.at(layers.size()-lay)->getActivationFunction()->derivative)),
+                layers.at(layers.size()-lay)->getWeights())));
+            
+        }
+        return akml::transpose(gradient);
     }
     
 protected:

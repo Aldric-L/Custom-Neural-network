@@ -21,6 +21,8 @@ public:
     inline void resize(std::size_t r, std::size_t c) = delete;
     inline void directSetNColumns(std::size_t c) = delete;
     inline void directSetNRows(std::size_t r) = delete;
+    template <akml::MatrixConcept MATRIX_TYPE>
+    inline void forceAssignement(const MATRIX_TYPE& matrix) = delete;
     
     inline Matrix(const bool fromscratch=false) : DynamicMatrix<element_type>(ROWS, COLUMNS, fromscratch) {};
     

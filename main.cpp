@@ -23,7 +23,7 @@ int main (){
     // XOR DIM 3
     akml::NeuralNetwork::initialize_list_type xor3_initList = {{ std::make_pair(3, nullptr), std::make_pair(3, &akml::ActivationFunctions::RELU), std::make_pair(3, &akml::ActivationFunctions::RELU), std::make_pair(1, &akml::ActivationFunctions::SIGMOID) }};
     
-    std::vector<akml::DynamicMatrix <float>> inputs = {{ 
+    std::vector<akml::DynamicMatrix <float>> inputs = {{
         akml::make_dynamic_vector<float>(1.f,0.f,0.f), akml::make_dynamic_vector<float>(0.f,0.f, 1.f),
         akml::make_dynamic_vector<float>(0.f,1.f,0.f), akml::make_dynamic_vector<float>(1.f,1.f,0.f),
         akml::make_dynamic_vector<float>(1.f,0.f,1.f), akml::make_dynamic_vector<float>(0.f,1.f,1.f),
@@ -33,6 +33,7 @@ int main (){
         (SINGLETON){{ {1} }}, (SINGLETON){{ {0} }},
         (SINGLETON){{ {0} }}, (SINGLETON){{ {0} }}, (SINGLETON){{ {0} }} }};
     
+    bestnet = new akml::NeuralNetwork (xor3_initList);
     
     // Genetic algorithm
     /*akml::GeneticAlgorithm ga (100, xor3_initList);
