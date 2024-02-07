@@ -48,6 +48,7 @@ public:
     //inline element_type*& getStorageEnd() { return this->m_data_end; }
     inline element_type* getStorage() const { return this->m_data; }
     inline element_type* getStorageEnd() const { return this->m_data_end; }
+    inline std::size_t getStorageLen() const { return (this->rows) * (this->columns); }
     inline element_type* getInternElement(const std::size_t pos) const {
         if (pos >= (this->rows) * (this->columns))
             throw std::invalid_argument("Attempt to access to an out of reach element of a matrix");
