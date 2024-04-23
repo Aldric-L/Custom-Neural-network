@@ -9,14 +9,14 @@
 
 namespace akml {
 
-static akml::GeneticAlgorithm::postactivation_process_type akml::GeneticAlgorithm::ACTIVATE_ROUND = [](DynamicMatrix <float> row_output) {
+akml::GeneticAlgorithm::postactivation_process_type akml::GeneticAlgorithm::ACTIVATE_ROUND = [](DynamicMatrix <float> row_output) {
     for (std::size_t outputIncr(1); outputIncr <= row_output.getNRows(); outputIncr++){
         row_output(outputIncr, 1) = std::roundf(row_output(outputIncr, 1));
     }
     return row_output;
 };
 
-static akml::GeneticAlgorithm::merging_process_type akml::GeneticAlgorithm::DEFAULT_MERGING_INSTRUCTIONS = [](akml::NeuralNetwork* child, akml::NeuralNetwork* parent1, akml::NeuralNetwork* parent2) {
+akml::GeneticAlgorithm::merging_process_type akml::GeneticAlgorithm::DEFAULT_MERGING_INSTRUCTIONS = [](akml::NeuralNetwork* child, akml::NeuralNetwork* parent1, akml::NeuralNetwork* parent2) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::normal_distribution<double> distribution(0.0,GeneticAlgorithm::sigma);
