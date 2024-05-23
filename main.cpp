@@ -1,7 +1,9 @@
-#include <iostream>
 #include "AKML.hpp"
 #include "NeuralFunctions.hpp"
 #include "GeneticAlgorithm.hpp"
+
+#include <iostream>
+#include <chrono>
 
 int main (){
     using SINGLETON = std::array <std::array <float, 1>, 1>;
@@ -35,13 +37,18 @@ int main (){
     
     bestnet = new akml::NeuralNetwork (xor3_initList);
     
+    auto start = std::chrono::high_resolution_clock::now();
     // Genetic algorithm
     /*akml::GeneticAlgorithm ga (100, xor3_initList);
     bestnet = ga.trainNetworks(5000, inputs, outputs);*/
 
     // Gradient descent
-    /*bestnet = new akml::NeuralNetwork (xor3_initList);
-    bestnet->stochGradientTraining(inputs, outputs, 3, 0.02, 50000);*/
+    bestnet = new akml::NeuralNetwork (xor3_initList);
+    bestnet->adamGradientTraining(inputs, outputs, 3, 5000);
+    
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration = end - start;
+    std::cout << "\nExecutionTime=" << duration.count() << "\n";
     
     for (std::size_t inputid(0); inputid<inputs.size(); inputid++){
         std::cout << "\nTesting with " << std::endl;
